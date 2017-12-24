@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="RapiderCxxErrorParser"
+         name="Rapider error parser for C/C++"
+         point="org.eclipse.cdt.core.ErrorParser">
+      <errorparser
+            class="fr.jayacode.rapider.checker.cxx.parser.ErrorParser"
+            id="fr.jayacode.rapider.checker.cxx.parser"
+            name="Rapider error parser for C/C++">
+         <context
+               type="codan">
+         </context>
+      </errorparser>
+   </extension>
+   <extension
+         id="fr.jayacode.rapider.checker.cxx.checkers"
+         point="org.eclipse.cdt.codan.core.checkers">
+      <category
+            id="fr.jayacode.rapider.checker.cxx.category"
+            name="Catégorie Rapider">
+      </category>
+      <checker
+            class="fr.jayacode.rapider.checker.cxx.checker.Checker"
+            id="fr.jayacode.rapider.checker.cxx.checker"
+            name="Checker Rapider">
+         <problem
+               category="fr.jayacode.rapider.checker.cxx.category"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="description regle rapider 1"
+               id="fr.jayacode.rapider.checker.cxx.problem1"
+               messagePattern="{0}"
+               name="Regle 1">
+         </problem>
+         <problem
+               category="fr.jayacode.rapider.checker.cxx.category"
+               defaultEnabled="true"
+               defaultSeverity="Error"
+               description="description regle rapider 2"
+               id="fr.jayacode.rapider.checker.cxx.problem2"
+               messagePattern="{0}"
+               name="Regle 2">
+         </problem>
+      </checker>
+   </extension>
+
+</plugin>
