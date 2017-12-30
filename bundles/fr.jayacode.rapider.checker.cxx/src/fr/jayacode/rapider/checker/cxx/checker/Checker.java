@@ -10,10 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.cdt.codan.core.cxx.externaltool.AbstractExternalToolBasedChecker;
-import org.eclipse.cdt.codan.core.cxx.externaltool.ArgsSeparator;
 import org.eclipse.cdt.codan.core.cxx.externaltool.ConfigurationSettings;
-import org.eclipse.cdt.codan.core.cxx.externaltool.IInvocationParametersProvider;
+import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
 import org.eclipse.cdt.codan.core.model.IChecker;
+import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
+import org.eclipse.cdt.codan.core.param.IProblemPreference;
 import org.eclipse.cdt.core.IMarkerGenerator;
 import org.eclipse.cdt.core.ProblemMarkerInfo;
 import org.eclipse.core.resources.IResource;
@@ -24,8 +25,15 @@ import org.eclipse.core.resources.IResource;
  */
 public class Checker extends AbstractExternalToolBasedChecker implements IChecker {
 
+	private static final String RAPIDER_TOOL_NAME = "Rapider";
 	static private Collection<String> PROCESSED_EXTENSIONS = Arrays.asList("cpp", "CPP", "c", "C");
 
+	public Checker() {
+		super(new ConfigurationSettings(RAPIDER_TOOL_NAME,
+				new File("/home/cconversin/workspace/FakeRapider/Release/FakeRapider"), ""));
+	}
+
+	
 	@Override
 	public boolean processResource(IResource resource) {
 		if (PROCESSED_EXTENSIONS.contains(resource.getFileExtension())) {
@@ -35,32 +43,14 @@ public class Checker extends AbstractExternalToolBasedChecker implements IChecke
 	}
 
 	@Override
+	public void initPreferences(IProblemWorkingCopy problem) {
+		// TODO : ne faire ça qu'une seule fois
+		super.initPreferences(problem);
+	}
+
+	@Override
 	public void addMarker(ProblemMarkerInfo info) {
 		super.addMarker(info);
-	}
-
-	public Checker() {
-		super(new ConfigurationSettings("Rapider",
-				new File("/home/cconversin/workspace/FakeRapider/Release/FakeRapider"), ""));
-	}
-
-	/**
-	 * @param settings
-	 */
-	public Checker(ConfigurationSettings settings) {
-		super(settings);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param parametersProvider
-	 * @param argsSeparator
-	 * @param settings
-	 */
-	public Checker(IInvocationParametersProvider parametersProvider, ArgsSeparator argsSeparator,
-			ConfigurationSettings settings) {
-		super(parametersProvider, argsSeparator, settings);
-		// TODO Auto-generated constructor stub
 	}
 
 	/*
