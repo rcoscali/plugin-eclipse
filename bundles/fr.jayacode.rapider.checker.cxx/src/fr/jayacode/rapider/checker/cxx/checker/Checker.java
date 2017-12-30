@@ -11,26 +11,27 @@ import java.util.Map;
 
 import org.eclipse.cdt.codan.core.cxx.externaltool.AbstractExternalToolBasedChecker;
 import org.eclipse.cdt.codan.core.cxx.externaltool.ConfigurationSettings;
-import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
 import org.eclipse.cdt.codan.core.model.IChecker;
 import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
-import org.eclipse.cdt.codan.core.param.IProblemPreference;
 import org.eclipse.cdt.core.IMarkerGenerator;
 import org.eclipse.cdt.core.ProblemMarkerInfo;
 import org.eclipse.core.resources.IResource;
+
+import fr.jayacode.rapider.checker.cxx.Messages;
 
 /**
  * @author cconversin
  *
  */
+@SuppressWarnings("boxing")
 public class Checker extends AbstractExternalToolBasedChecker implements IChecker {
 
-	private static final String RAPIDER_TOOL_NAME = "Rapider";
-	static private Collection<String> PROCESSED_EXTENSIONS = Arrays.asList("cpp", "CPP", "c", "C");
+	private static final String RAPIDER_TOOL_NAME = Messages.Checker_RapiderToolName;
+	static private Collection<String> PROCESSED_EXTENSIONS = Arrays.asList("cpp", "CPP", "c", "C");  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
 
 	public Checker() {
 		super(new ConfigurationSettings(RAPIDER_TOOL_NAME,
-				new File("/home/cconversin/workspace/FakeRapider/Release/FakeRapider"), ""));
+				new File("/home/cconversin/workspace/FakeRapider/Release/FakeRapider"), "")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	
@@ -62,15 +63,15 @@ public class Checker extends AbstractExternalToolBasedChecker implements IChecke
 	 */
 	@Override
 	protected String[] getParserIDs() {
-		return new String[] { "fr.jayacode.rapider.checker.cxx.parser" };
+		return new String[] { "fr.jayacode.rapider.checker.cxx.parser" }; //$NON-NLS-1$
 	}
 
-	private static final String ERROR_PROBLEM_ID = "fr.jayacode.rapider.checker.cxx.problem1";
+	private static final String ERROR_PROBLEM_ID = "fr.jayacode.rapider.checker.cxx.problem1"; //$NON-NLS-1$
 	private static final Map<Integer, String> PROBLEM_IDS = new HashMap<Integer, String>();
 
 	static {
 		PROBLEM_IDS.put(IMarkerGenerator.SEVERITY_WARNING, ERROR_PROBLEM_ID);
-		PROBLEM_IDS.put(IMarkerGenerator.SEVERITY_INFO, "fr.jayacode.rapider.checker.cxx.problem2");
+		PROBLEM_IDS.put(IMarkerGenerator.SEVERITY_INFO, "fr.jayacode.rapider.checker.cxx.problem2"); //$NON-NLS-1$
 	}
 
 	/*

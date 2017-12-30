@@ -23,7 +23,7 @@ public class ErrorParser implements IErrorParser {
 	// /path/to/project/src/HelloWorld.cpp|1|1|7|erreur type1
 	// -----------------1----------------- 2 3 4 -----5------
 	//
-	private static Pattern lineParsingPattern = Pattern.compile("(.*)\\|(\\d+)\\|(\\d+)\\|(\\d+)\\|(.*)");
+	private static Pattern lineParsingPattern = Pattern.compile("(.*)\\|(\\d+)\\|(\\d+)\\|(\\d+)\\|(.*)"); //$NON-NLS-1$
 
 	/**
 	 * 
