@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Rapider Code Analysis for C/C++
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: fr.jayacode.rapider.checker.cxx;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: Jayacode
+Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.cdt.codan.core;bundle-version="4.0.0",
  org.eclipse.cdt.codan.core.cxx;bundle-version="3.4.0",

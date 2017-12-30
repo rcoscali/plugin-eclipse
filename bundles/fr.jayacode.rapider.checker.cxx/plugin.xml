@@ -8,7 +8,7 @@
       <errorparser
             class="fr.jayacode.rapider.checker.cxx.parser.ErrorParser"
             id="fr.jayacode.rapider.checker.cxx.parser"
-            name="Rapider error parser for C/C++">
+            name="%errorparser.name">
          <context
                type="codan">
          </context>
@@ -19,29 +19,29 @@
          point="org.eclipse.cdt.codan.core.checkers">
       <category
             id="fr.jayacode.rapider.checker.cxx.category"
-            name="Catégorie Rapider">
+            name="%category.name">
       </category>
       <checker
             class="fr.jayacode.rapider.checker.cxx.checker.Checker"
             id="fr.jayacode.rapider.checker.cxx.checker"
-            name="Checker Rapider">
+            name="%checker.name">
          <problem
                category="fr.jayacode.rapider.checker.cxx.category"
                defaultEnabled="true"
                defaultSeverity="Warning"
-               description="description regle rapider 1"
+               description="%problem.rule1.description"
                id="fr.jayacode.rapider.checker.cxx.problem1"
                messagePattern="{0}"
-               name="Regle 1">
+               name="%problem.rule1.name">
          </problem>
          <problem
                category="fr.jayacode.rapider.checker.cxx.category"
                defaultEnabled="true"
                defaultSeverity="Error"
-               description="description regle rapider 2"
+               description="%problem.rule2.description"
                id="fr.jayacode.rapider.checker.cxx.problem2"
                messagePattern="{0}"
-               name="Regle 2">
+               name="%problem.rule2.name">
          </problem>
       </checker>
    </extension>
