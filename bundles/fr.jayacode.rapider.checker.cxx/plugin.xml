@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="RapiderCxxErrorParser"
-         name="Rapider error parser for C/C++"
+         name="%errorparser.name"
          point="org.eclipse.cdt.core.ErrorParser">
       <errorparser
             class="fr.jayacode.rapider.checker.cxx.parser.ErrorParser"
@@ -30,7 +30,7 @@
                defaultEnabled="true"
                defaultSeverity="Warning"
                description="%problem.rule1.description"
-               id="fr.jayacode.rapider.checker.cxx.problem1"
+               id="fr.jayacode.rapider.checker.cxx.rule1"
                messagePattern="{0}"
                name="%problem.rule1.name">
          </problem>
@@ -39,11 +39,135 @@
                defaultEnabled="true"
                defaultSeverity="Error"
                description="%problem.rule2.description"
-               id="fr.jayacode.rapider.checker.cxx.problem2"
+               id="fr.jayacode.rapider.checker.cxx.rule2"
                messagePattern="{0}"
                name="%problem.rule2.name">
          </problem>
+         <problem
+               category="fr.jayacode.rapider.checker.cxx.category"
+               defaultEnabled="true"
+               defaultSeverity="Error"
+               description="%problem.otherError.description"
+               id="fr.jayacode.rapider.checker.cxx.otherError"
+               messagePattern="{0}"
+               name="%problem.otherError.name">
+         </problem>
+         <problem
+               category="fr.jayacode.rapider.checker.cxx.category"
+               defaultEnabled="true"
+               defaultSeverity="Warning"
+               description="%problem.otherWarning.description"
+               id="fr.jayacode.rapider.checker.cxx.otherWarning"
+               messagePattern="{0}"
+               name="%problem.otherWarning.name">
+         </problem>
+         <problem
+               category="fr.jayacode.rapider.checker.cxx.category"
+               defaultEnabled="true"
+               defaultSeverity="Info"
+               description="%problem.otherInfo.description"
+               id="fr.jayacode.rapider.checker.cxx.otherInfo"
+               messagePattern="{0}"
+               name="%problem.otherInfo.name">
+         </problem>
       </checker>
    </extension>
-
+   <extension
+         id="fr.jayacode.rapider.marker"
+         name="%marker.name"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="false">
+      </persistent>
+      <super
+            type="org.eclipse.cdt.codan.core.codanProblem">
+      </super>
+      <attribute
+            name="patch">
+      </attribute>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerSeverity="0"
+            markerType="fr.jayacode.rapider.marker"
+            name="fr.jayacode.rapider.checker.cxx.annotation.info"
+            super="org.eclipse.cdt.codan.ui.annotation.info">
+      </type>
+      <type
+            markerSeverity="1"
+            markerType="fr.jayacode.rapider.marker"
+            name="fr.jayacode.rapider.checker.cxx.annotation.warning"
+            super="org.eclipse.cdt.codan.ui.annotation.warning">
+      </type>
+      <type
+            markerSeverity="2"
+            markerType="fr.jayacode.rapider.marker"
+            name="fr.jayacode.rapider.checker.cxx.annotation.error"
+            super="org.eclipse.cdt.codan.ui.annotation.error">
+      </type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="fr.jayacode.rapider.checker.cxx.annotation.error"
+            colorPreferenceKey="org.eclipse.cdt.codan.ui.annotation.error.color"
+            colorPreferenceValue="255,0,0"
+            icon="icons/red-jr.gif"
+            isGoToNextNavigationTarget="true"
+            isGoToNextNavigationTargetKey="org.eclipse.cdt.codan.ui.annotation.error.GoToNextNavigationTarget"
+            isGoToPreviousNavigationTarget="true"
+            isGoToPreviousNavigationTargetKey="org.eclipse.cdt.codan.ui.annotation.error.GoToPreviousNavigationTarget"
+            label="%marker.error.name"
+            overviewRulerPreferenceKey="org.eclipse.cdt.codan.ui.annotation.error.overview"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="6"
+            quickFixIcon="icons/red-jr.gif"
+            showInNextPrevDropdownToolbarAction="true"
+            showInNextPrevDropdownToolbarActionKey="org.eclipse.cdt.codan.ui.annotation.error.NextPrevDropdownToolbar"
+            textPreferenceKey="org.eclipse.cdt.codan.ui.annotation.error.text"
+            textPreferenceValue="true"
+            textStylePreferenceKey="org.eclipse.cdt.codan.ui.annotation.error.textstyle"
+            textStylePreferenceValue="SQUIGGLES"
+            verticalRulerPreferenceKey="org.eclipse.cdt.codan.ui.annotation.error.ruler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+      <specification
+            annotationType="fr.jayacode.rapider.checker.cxx.annotation.warning"
+            colorPreferenceKey="org.eclipse.cdt.codan.ui.annotation.warning.color"
+            colorPreferenceValue="255,255,0"
+            icon="icons/orange-jr.gif"
+            isGoToNextNavigationTarget="true"
+            isGoToNextNavigationTargetKey="org.eclipse.cdt.codan.ui.annotation.warning.GoToNextNavigationTarget"
+            isGoToPreviousNavigationTarget="true"
+            isGoToPreviousNavigationTargetKey="org.eclipse.cdt.codan.ui.annotation.warning.GoToPreviousNavigationTarget"
+            label="%marker.warning.name"
+            overviewRulerPreferenceKey="org.eclipse.cdt.codan.ui.annotation.warning.overview"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="5"
+            quickFixIcon="icons/orange-jr.gif"
+            showInNextPrevDropdownToolbarAction="true"
+            showInNextPrevDropdownToolbarActionKey="org.eclipse.cdt.codan.ui.annotation.warning.NextPrevDropdownToolbar"
+            textPreferenceKey="org.eclipse.cdt.codan.ui.annotation.warning.text"
+            textPreferenceValue="true"
+            textStylePreferenceKey="org.eclipse.cdt.codan.ui.annotation.warning.textstyle"
+            textStylePreferenceValue="SQUIGGLES"
+            verticalRulerPreferenceKey="org.eclipse.cdt.codan.ui.annotation.warning.ruler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+      <specification
+            annotationType="fr.jayacode.rapider.checker.cxx.annotation.info"
+            icon="icons/green-jr.gif"
+            label="%marker.info.name"
+            presentationLayer="4">
+      </specification>
+   </extension>
+   <extension
+         id="fr.jayacode.rapider.checker.markerResolution"
+         point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
+      <resolution
+            class="fr.jayacode.rapider.checker.cxx.quickfix.MarkerResolution"
+            problemId="fr.jayacode.rapider.checker.cxx.problem1">
+      </resolution>
+   </extension>
 </plugin>
