@@ -21,8 +21,8 @@ public class ErrorParser implements IErrorParser {
 
 	// sample line to parse:
 	//
-	// /path/to/project/src/HelloWorld.cpp|charStart|charEnd|règle|sévérité|description de l'erreur|ReplacementText
-	// -----------------1----------------- ----2---- ---3--- --4-- ----5--- ----------6------------ -------7-------
+	// /path/to/project/src/file.cpp|charStart|charEnd|règle|sévérité|description de l'erreur|ReplacementText
+	// --------------1-------------- ----2---- ---3--- --4-- ----5--- ----------6------------ -------7-------
 	//
 	//
 	private static Pattern lineParsingPattern = Pattern.compile("(.*)\\|(\\d+)\\|(\\d+)\\|(.*)\\|(.*)\\|(.*)\\|(.*)"); //$NON-NLS-1$
