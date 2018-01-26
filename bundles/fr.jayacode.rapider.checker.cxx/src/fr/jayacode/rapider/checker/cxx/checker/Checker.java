@@ -25,7 +25,6 @@ import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationFailure;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParametersProvider;
 import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
-import org.eclipse.cdt.codan.core.cxx.internal.externaltool.ExternalToolInvoker;
 import org.eclipse.cdt.codan.core.model.AbstractCheckerWithProblemPreferences;
 import org.eclipse.cdt.codan.core.model.CheckerLaunchMode;
 import org.eclipse.cdt.codan.core.model.IProblem;
@@ -83,26 +82,10 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	private List<String> problemIds = new ArrayList<String>();
 
 	public Checker() {
-		this(new InvocationParametersProvider(), new ArgsSeparator(), new ConfigurationSettings(RAPIDER_TOOL_NAME,
-				new File("/home/cconversin/workspace/FakeRapider/Release/FakeRapider"), ""));
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param parametersProvider
-	 *            provides the parameters to pass when invoking the external tool.
-	 * @param argsSeparator
-	 *            separates the arguments to pass to the external tool executable.
-	 *            These arguments are stored in a single {@code String}.
-	 * @param settings
-	 *            user-configurable external tool configuration settings.
-	 */
-	public Checker(IInvocationParametersProvider parametersProvider, ArgsSeparator argsSeparator,
-			ConfigurationSettings settings) {
-		this.parametersProvider = parametersProvider;
-		this.argsSeparator = argsSeparator;
-		this.settings = settings;
+		this.parametersProvider = new InvocationParametersProvider();
+		this.argsSeparator = new ArgsSeparator();
+		this.settings = new ConfigurationSettings(RAPIDER_TOOL_NAME,
+				new File("/home/cconversin/workspace/FakeRapider/Release/FakeRapider"), "");
 		this.externalToolInvoker = new ExternalToolInvoker();
 		this.preferences = new SharedRootProblemPreference();
 	}
@@ -144,6 +127,7 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	 * @throws Throwable
 	 */
 	private void invokeRapider(InvocationParameters parameters) throws Throwable {
+		// TODO logger quand Rapider pas trouvé (le code n'est pas forcément ici, mais je le mets ici, comme pense-bête)
 		IConsoleParser[] parsers = new IConsoleParser[] { createErrorParserManager(parameters) };
 		try {
 			this.externalToolInvoker.invoke(parameters, this.settings, this.argsSeparator, parsers);
