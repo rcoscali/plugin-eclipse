@@ -23,15 +23,12 @@ import org.eclipse.cdt.codan.core.cxx.externaltool.IInvocationParametersProvider
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationFailure;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParametersProvider;
-import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
 import org.eclipse.cdt.codan.core.model.AbstractCheckerWithProblemPreferences;
 import org.eclipse.cdt.codan.core.model.CheckerLaunchMode;
 import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.core.model.IProblemLocation;
 import org.eclipse.cdt.codan.core.model.IProblemLocationFactory;
 import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
-import org.eclipse.cdt.codan.core.param.IProblemPreference;
-import org.eclipse.cdt.codan.core.param.MapProblemPreference;
 import org.eclipse.cdt.codan.core.param.RootProblemPreference;
 import org.eclipse.cdt.codan.core.param.SharedRootProblemPreference;
 import org.eclipse.cdt.core.ErrorParserManager;
@@ -75,19 +72,12 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 
 	private final ExternalToolInvoker externalToolInvoker;
 	private final IInvocationParametersProvider parametersProvider;
-	private final ArgsSeparator argsSeparator;
-	private final ConfigurationSettings settings;
-	private final RootProblemPreference preferences;
 
 	private List<String> problemIds = new ArrayList<String>();
 
 	public Checker() {
 		this.parametersProvider = new InvocationParametersProvider();
-		this.argsSeparator = new ArgsSeparator();
-		this.settings = new ConfigurationSettings(RAPIDER_TOOL_NAME,
-				new File("/home/cconversin/workspace/FakeRapider/Release/FakeRapider"), "");
 		this.externalToolInvoker = new ExternalToolInvoker();
-		this.preferences = new SharedRootProblemPreference();
 	}
 
 	/**
@@ -129,7 +119,7 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	private void invokeRapider(InvocationParameters parameters) throws Throwable {
 		IConsoleParser[] parsers = new IConsoleParser[] { createErrorParserManager(parameters) };
 		try {
-			this.externalToolInvoker.invoke(parameters, this.settings, this.argsSeparator, parsers);
+			this.externalToolInvoker.invoke(parameters, parsers);
 		} catch (InvocationFailure error) {
 			handleInvocationFailure(error, parameters);
 		}
@@ -166,29 +156,6 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		this.problemIds.add(problem.getId());
 		getLaunchModePreference(problem).enableInLaunchModes(CheckerLaunchMode.RUN_ON_DEMAND,
 				CheckerLaunchMode.RUN_ON_FILE_OPEN, CheckerLaunchMode.RUN_ON_FILE_SAVE);
-	}
-
-	private void addPreference(IProblemWorkingCopy problem, SingleConfigurationSetting<?> setting) {
-		IProblemPreference descriptor = (IProblemPreference) setting.getDescriptor();
-		addPreference(problem, descriptor, setting.getDefaultValue());
-	}
-
-	@Override
-	protected void setDefaultPreferenceValue(IProblemWorkingCopy problem, String key, Object defaultValue) {
-		MapProblemPreference map = getTopLevelPreference(problem);
-		map.setChildValue(key, defaultValue);
-	}
-
-	@Override
-	public RootProblemPreference getTopLevelPreference(IProblem problem) {
-		RootProblemPreference map = (RootProblemPreference) problem.getPreference();
-		if (map == null) {
-			map = this.preferences;
-			if (problem instanceof IProblemWorkingCopy) {
-				((IProblemWorkingCopy) problem).setPreference(map);
-			}
-		}
-		return map;
 	}
 
 	/*
