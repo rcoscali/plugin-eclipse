@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.IConsoleParser;
 
+import fr.jayacode.rapider.checker.cxx.Activator;
+
 /**
  * Intercepts an output to console and forwards it to console parsers for processing
  */
@@ -149,7 +151,7 @@ public class ConsoleOutputSniffer {
 					this.parsers[i].shutdown();
 				} catch (Throwable e) {
 					// Report exception if any but let all the parsers a chance to shutdown.
-					CCorePlugin.log(e);
+					Activator.logError(e);
 				}
 			}
 		}
@@ -166,7 +168,7 @@ public class ConsoleOutputSniffer {
 				// Report exception if any but let all the parsers a chance to process the line.
 				parser.processLine(line);
 			} catch (Throwable e) {
-				CCorePlugin.log(e);
+				Activator.logError(e);
 			}
 		}
 	}

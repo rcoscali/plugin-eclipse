@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.cdt.codan.core.CodanRuntime;
-import org.eclipse.cdt.codan.core.cxx.Activator;
 import org.eclipse.cdt.codan.core.cxx.externaltool.ArgsSeparator;
 import org.eclipse.cdt.codan.core.cxx.externaltool.ConfigurationSettings;
 import org.eclipse.cdt.codan.core.cxx.externaltool.IInvocationParametersProvider;
@@ -45,6 +44,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
+import fr.jayacode.rapider.checker.cxx.Activator;
 import fr.jayacode.rapider.checker.cxx.Messages;
 
 /**
@@ -127,7 +127,6 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	 * @throws Throwable
 	 */
 	private void invokeRapider(InvocationParameters parameters) throws Throwable {
-		// TODO logger quand Rapider pas trouvé (le code n'est pas forcément ici, mais je le mets ici, comme pense-bête)
 		IConsoleParser[] parsers = new IConsoleParser[] { createErrorParserManager(parameters) };
 		try {
 			this.externalToolInvoker.invoke(parameters, this.settings, this.argsSeparator, parsers);
@@ -158,7 +157,7 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	private static void logResourceProcessingFailure(Throwable error, IResource resource) {
 		String location = resource.getLocation().toOSString();
 		String msg = String.format("Unable to process resource %s", location); //$NON-NLS-1$
-		Activator.log(msg, error);
+		Activator.logError(msg, error);
 	}
 
 	@Override
