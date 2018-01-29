@@ -36,7 +36,7 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static void logError(final String message, final Throwable e) {
-		log(createErrorStatus(message, null));
+		log(createErrorStatus(message, e));
 	}
 
 	public static void logError(final String message) {
