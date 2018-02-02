@@ -29,6 +29,7 @@ import fr.jayacode.rapider.checker.cxx.Activator;
 import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 
 public class ExternalToolInvoker {
+	private static final String RAPIDER_EXE_RELATIVE_PATH = "/binres/FakeRapider"; //$NON-NLS-1$
 	private static final String DEFAULT_CONTEXT_MENU_ID = "org.eclipse.cdt.ui.CDTBuildConsole"; //$NON-NLS-1$
 	private static final NullProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
 	private File embeddedRapider = null;
@@ -161,9 +162,12 @@ public class ExternalToolInvoker {
 		return this.embeddedRapider;
 	}
 
+	/**
+	 * @return the URL of the Rapider executable
+	 */
 	private static URL getRapiderURL() {
 		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-		URL fileURL = bundle.getEntry("./binres/FakeRapider"); //$NON-NLS-1$
+		URL fileURL = bundle.getEntry(RAPIDER_EXE_RELATIVE_PATH);
 		return fileURL;
 	}
 
