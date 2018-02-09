@@ -1,11 +1,16 @@
 package fr.jayacode.rapider.checker.cxx.checker;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Date;
+import java.util.Map;
+import java.util.Timer;
 
 import org.eclipse.cdt.codan.core.cxx.externaltool.ArgsSeparator;
 import org.eclipse.cdt.codan.core.cxx.externaltool.ConfigurationSettings;
@@ -17,6 +22,7 @@ import org.eclipse.cdt.core.ICommandLauncher;
 import org.eclipse.cdt.core.IConsoleParser;
 import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,13 +30,17 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.framework.Bundle;
+import org.yaml.snakeyaml.Yaml;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
 import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 
 public class ExternalToolInvoker {
-	private static final String RAPIDER_EXE_RELATIVE_PATH = "/binres/FakeRapider"; //$NON-NLS-1$
+	private static final String RAPIDER_TOOL_NAME = "Rapider"; //$NON-NLS-1$
+	private static final String RAPIDER_EXE_RELATIVE_PATH = "/binres/clang-tidy"; //$NON-NLS-1$
 	private static final String DEFAULT_CONTEXT_MENU_ID = "org.eclipse.cdt.ui.CDTBuildConsole"; //$NON-NLS-1$
+	public static final String EXPORT_FIXES_OPTION_KEYWORD = "-export-fixes="; //$NON-NLS-1$
+	private static final String ARGS_FORMAT= EXPORT_FIXES_OPTION_KEYWORD + "%s -p /usr/local/llvm-5.0.0/examples/Tidy/compile_commands.json -checks=*"; //$NON-NLS-1$
 	private static final NullProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
 	private File embeddedRapider = null;
 
@@ -54,6 +64,7 @@ public class ExternalToolInvoker {
 	 *             if something else goes wrong.
 	 */
 	public void invoke(InvocationParameters parameters, IConsoleParser[] parsers) throws InvocationFailure, Throwable {
+//		testYaml();
 		boolean isEmbeddedRapiderUsed = Activator.getInstance().getPreferenceStore()
 				.getBoolean(PreferencePage.USE_EXTERNAL_TOOL_PREF_KEY);
 		File rapiderExe;
@@ -64,9 +75,22 @@ public class ExternalToolInvoker {
 					Activator.getInstance().getPreferenceStore().getString(PreferencePage.EXTERNAL_TOOL_PATH_PREF_KEY));
 		}
 		ArgsSeparator argsSeparator = new ArgsSeparator();
-		ConfigurationSettings settings = new ConfigurationSettings("Rapider", rapiderExe, "");
+
+		// building the args (notably the export file)
+		// TODO gérer le chemin vers le compile_commands.json
+		// + si ce chemin n'est pas renseigné --> lever une exception
+		final File outFile = createExportFixesFile(parameters.getActualFile());
+		String args = String.format(ARGS_FORMAT, outFile.getAbsolutePath());
+		ConfigurationSettings settings = new ConfigurationSettings(RAPIDER_TOOL_NAME, rapiderExe, args);
 		Command command = CommandBuilder.buildCommand(parameters, settings, argsSeparator);
 		launchCommand(command, parsers, parameters, settings);
+	}
+
+	private static File createExportFixesFile(final IResource actualFile) throws IOException {
+		String exportFileName = "RapiderTmp_export_fixes_" + actualFile.getName(); //$NON-NLS-1$
+		final File tempFile = File.createTempFile(exportFileName, Long.toString(System.currentTimeMillis()));
+		tempFile.deleteOnExit(); // the temporary file will be deleted as soon as Java quits
+		return tempFile;
 	}
 
 	private static void launchCommand(Command command, IConsoleParser[] parsers, InvocationParameters parameters,
@@ -138,6 +162,9 @@ public class ExternalToolInvoker {
 		// executable file is not know yet -> we have to find it and extract it if
 		// necessary
 		final URL url = getRapiderURL();
+		if (url == null) {
+			throw new FileNotFoundException("Can not find embedded Rapider");
+		}
 
 		final File tempFile = File.createTempFile("RapiderTmp", Long.toString(System.currentTimeMillis())); //$NON-NLS-1$
 		tempFile.deleteOnExit(); // the temporary file will be deleted as soon as Java quits
@@ -163,7 +190,7 @@ public class ExternalToolInvoker {
 	}
 
 	/**
-	 * @return the URL of the Rapider executable
+	 * @return the URL of the Rapider executable, null if not found
 	 */
 	private static URL getRapiderURL() {
 		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
@@ -171,4 +198,24 @@ public class ExternalToolInvoker {
 		return fileURL;
 	}
 
+	private static void testYaml() throws FileNotFoundException {
+		Yaml yaml = new Yaml();
+		
+		System.out.println(yaml.dump(yaml.load(new FileInputStream(new File(
+				"/home/cconversin/Téléchargements/export-fixes.log"))))); //$NON-NLS-1$
+
+		@SuppressWarnings("unchecked")
+		Map<String, Map<String, String>> values = (Map<String, Map<String, String>>) yaml
+				.load(new FileInputStream(new File("/home/cconversin/Téléchargements/export-fixes.log"))); //$NON-NLS-1$
+
+		for (String key : values.keySet()) {
+			Map subValues = values.get(key);
+			System.out.println(key);
+
+			for (Object subValueKey : subValues.keySet()) {
+				System.out.println(String.format("\t%s = %s",
+						subValueKey, subValues.get(subValueKey)));
+			}
+}
+	}
 }

@@ -34,15 +34,18 @@ public class CommandBuilder {
 
 	private static String[] configuredArgs(ConfigurationSettings settings, ArgsSeparator argsSeparator) {
 		String args = settings.getArgs().getValue();
+		if (null == args || args.isEmpty()) {
+			args = settings.getArgs().getDefaultValue();
+		}
 		return argsSeparator.splitArguments(args);
 	}
 
 	private static String[] addFilePathToArgs(String actualFilePath, String[] configuredArgs) {
 		int argCount = configuredArgs.length;
 		String[] allArgs = new String[argCount + 1];
-		allArgs[0] = actualFilePath;
 		// Copy arguments
-		System.arraycopy(configuredArgs, 0, allArgs, 1, argCount);
+		System.arraycopy(configuredArgs, 0, allArgs, 0, argCount);
+		allArgs[argCount] = actualFilePath;
 		return allArgs;
 	}
 
