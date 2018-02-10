@@ -6,7 +6,7 @@
          name="%errorparser.name"
          point="org.eclipse.cdt.core.ErrorParser">
       <errorparser
-            class="fr.jayacode.rapider.checker.cxx.parser.ErrorParser"
+            class="fr.jayacode.rapider.checker.cxx.checker.ErrorParser"
             id="fr.jayacode.rapider.checker.cxx.parser"
             name="%errorparser.name">
          <context
@@ -28,52 +28,15 @@
          <problem
                category="fr.jayacode.rapider.checker.cxx.category"
                defaultEnabled="true"
-               defaultSeverity="Warning"
-               description="%problem.rule1.description"
-               id="fr.jayacode.rapider.checker.cxx.rule1"
+               description="%problem.description"
+               id="fr.jayacode.rapider.checker.cxx.rapiderProblem"
                messagePattern="{0}"
-               name="%problem.rule1.name">
-         </problem>
-         <problem
-               category="fr.jayacode.rapider.checker.cxx.category"
-               defaultEnabled="true"
-               defaultSeverity="Error"
-               description="%problem.rule2.description"
-               id="fr.jayacode.rapider.checker.cxx.rule2"
-               messagePattern="{0}"
-               name="%problem.rule2.name">
-         </problem>
-         <problem
-               category="fr.jayacode.rapider.checker.cxx.category"
-               defaultEnabled="true"
-               defaultSeverity="Error"
-               description="%problem.otherError.description"
-               id="fr.jayacode.rapider.checker.cxx.otherError"
-               messagePattern="{0}"
-               name="%problem.otherError.name">
-         </problem>
-         <problem
-               category="fr.jayacode.rapider.checker.cxx.category"
-               defaultEnabled="true"
-               defaultSeverity="Warning"
-               description="%problem.otherWarning.description"
-               id="fr.jayacode.rapider.checker.cxx.otherWarning"
-               messagePattern="{0}"
-               name="%problem.otherWarning.name">
-         </problem>
-         <problem
-               category="fr.jayacode.rapider.checker.cxx.category"
-               defaultEnabled="true"
-               defaultSeverity="Info"
-               description="%problem.otherInfo.description"
-               id="fr.jayacode.rapider.checker.cxx.otherInfo"
-               messagePattern="{0}"
-               name="%problem.otherInfo.name">
+               name="%problem.name">
          </problem>
       </checker>
    </extension>
    <extension
-         id="fr.jayacode.rapider.marker"
+         id="fr.jayacode.rapider.problemmarker"
          name="%marker.name"
          point="org.eclipse.core.resources.markers">
       <persistent

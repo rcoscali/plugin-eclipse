@@ -56,14 +56,6 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	private static final Collection<String> PROCESSED_EXTENSIONS = Arrays.asList("cpp", "CPP", "c", "C"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
 
 	/**
-	 * These problem ids will be used for errors whom rules can not map any of the
-	 * plugin registered problems. Cf. {@link mapProblemId}.
-	 */
-	private static final String GENERIC_ERROR_ID = "fr.jayacode.rapider.checker.cxx.otherError"; //$NON-NLS-1$
-	private static final String GENERIC_WARNING_ID = "fr.jayacode.rapider.checker.cxx.otherWarning"; //$NON-NLS-1$
-	private static final String GENERIC_INFO_ID = "fr.jayacode.rapider.checker.cxx.otherInfo"; //$NON-NLS-1$
-
-	/**
 	 * This prefix will be concatenated with replacement text to store quickfix
 	 * patches in Codan markers. Cf.
 	 * {@link fr.jayacode.rapider.checker.cxx.quickfix.MarkerResolution}.
@@ -170,7 +162,7 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	public void addMarker(final ProblemMarkerInfo info) {
 		RapiderProblemMarkerInfo castedInfo = (RapiderProblemMarkerInfo) info;
 		String replacementText = REPLACEMENT_TEXT_PREFIX + castedInfo.getReplacementText();
-		reportProblem(mapProblemId(castedInfo), createProblemLocation(info), info.description, replacementText);
+		reportProblem(RAPIDER_PROBLEM_ID, createProblemLocation(info), info.description, replacementText);
 	}
 
 	@Deprecated
@@ -195,13 +187,7 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		return new String[] { "fr.jayacode.rapider.checker.cxx.parser" }; //$NON-NLS-1$
 	}
 
-	private static final String ERROR_PROBLEM_ID = "fr.jayacode.rapider.checker.cxx.problem1"; //$NON-NLS-1$
-	private static final Map<Integer, String> PROBLEM_IDS = new HashMap<Integer, String>();
-
-	static {
-		PROBLEM_IDS.put(IMarkerGenerator.SEVERITY_WARNING, ERROR_PROBLEM_ID);
-		PROBLEM_IDS.put(IMarkerGenerator.SEVERITY_INFO, "fr.jayacode.rapider.checker.cxx.problem2"); //$NON-NLS-1$
-	}
+	private static final String RAPIDER_PROBLEM_ID = "fr.jayacode.rapider.checker.cxx.rapiderProblem"; //$NON-NLS-1$
 
 	/*
 	 * (non-Javadoc) Filtre pour les commentaires de suppression du problème : si la
@@ -237,23 +223,4 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		return super.shouldProduceProblem(problem, loc, args);
 	}
 
-	/**
-	 * Finds a registered problem id that corresponds to the marker id. A simple
-	 * string comparison is done. If no id is found, then a generic
-	 * info/warning/error id is returned
-	 * 
-	 * @param info
-	 * @return the id of the corresponding registered problem.
-	 */
-	private static String mapProblemId(final RapiderProblemMarkerInfo info) {
-
-		switch (info.severity) {
-		case IMarkerGenerator.SEVERITY_INFO:
-			return GENERIC_INFO_ID;
-		case IMarkerGenerator.SEVERITY_WARNING:
-			return GENERIC_WARNING_ID;
-		default:
-			return GENERIC_ERROR_ID;
-		}
-	}
 }
