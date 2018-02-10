@@ -42,8 +42,8 @@ public class ErrorParser implements IErrorParser {
 
 		String exportFilePath = null;
 		for (final String substring : line.split(" ")) { //$NON-NLS-1$
-			if (substring.startsWith(ExternalToolInvoker.EXPORT_FIXES_OPTION_KEYWORD)) {
-				exportFilePath = substring.substring(ExternalToolInvoker.EXPORT_FIXES_OPTION_KEYWORD.length());
+			if (substring.startsWith(RapiderInvoker.EXPORT_FIXES_OPTION_KEYWORD)) {
+				exportFilePath = substring.substring(RapiderInvoker.EXPORT_FIXES_OPTION_KEYWORD.length());
 				break;
 			}
 		}

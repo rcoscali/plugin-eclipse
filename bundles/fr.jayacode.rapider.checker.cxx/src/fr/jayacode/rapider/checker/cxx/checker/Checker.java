@@ -70,14 +70,14 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 
 	public static final String REPLACEMENT_TEXT_PREFIX = "rapiderreplacementtext:"; //$NON-NLS-1$
 
-	private final ExternalToolInvoker externalToolInvoker;
+	private final RapiderInvoker externalToolInvoker;
 	private final IInvocationParametersProvider parametersProvider;
 
 	private List<String> problemIds = new ArrayList<String>();
 
 	public Checker() {
 		this.parametersProvider = new InvocationParametersProvider();
-		this.externalToolInvoker = new ExternalToolInvoker();
+		this.externalToolInvoker = new RapiderInvoker();
 	}
 
 	/**
