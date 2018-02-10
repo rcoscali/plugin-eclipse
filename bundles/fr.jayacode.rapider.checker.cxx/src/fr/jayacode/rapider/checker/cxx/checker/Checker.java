@@ -46,15 +46,17 @@ import fr.jayacode.rapider.checker.cxx.Messages;
 
 /**
  * @author cconversin
- * TODO : demander à Rémy de me donner les descriptions des règles pour que je puisse les mettre dans les fichiers de messages
  *
  */
-@SuppressWarnings("boxing")
 public class Checker extends AbstractCheckerWithProblemPreferences implements IMarkerGenerator {
 
 	private static final String RAPIDER_TOOL_NAME = Messages.Checker_RapiderToolName;
 	private static final Collection<String> PROCESSED_EXTENSIONS = Arrays.asList("cpp", "CPP", "c", "C"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
 
+	private static final String RAPIDER_PARSER_ID = "fr.jayacode.rapider.checker.cxx.parser"; //$NON-NLS-1$
+	private static final String RAPIDER_PROBLEM_ID = "fr.jayacode.rapider.checker.cxx.rapiderProblem"; //$NON-NLS-1$
+
+	
 	/**
 	 * This prefix will be concatenated with replacement text to store quickfix
 	 * patches in Codan markers. Cf.
@@ -191,10 +193,9 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	 * getParserIDs()
 	 */
 	protected String[] getParserIDs() {
-		return new String[] { "fr.jayacode.rapider.checker.cxx.parser" }; //$NON-NLS-1$
+		return new String[] { RAPIDER_PARSER_ID };
 	}
 
-	private static final String RAPIDER_PROBLEM_ID = "fr.jayacode.rapider.checker.cxx.rapiderProblem"; //$NON-NLS-1$
 
 	/*
 	 * (non-Javadoc) Filtre pour les commentaires de suppression du problème : si la
