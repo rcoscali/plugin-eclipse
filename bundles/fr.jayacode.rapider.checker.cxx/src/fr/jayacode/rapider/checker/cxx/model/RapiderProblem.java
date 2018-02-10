@@ -1,7 +1,5 @@
 package fr.jayacode.rapider.checker.cxx.model;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;

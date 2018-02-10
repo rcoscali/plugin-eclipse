@@ -60,7 +60,13 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	 * patches in Codan markers. Cf.
 	 * {@link fr.jayacode.rapider.checker.cxx.quickfix.MarkerResolution}.
 	 */
-	private static final String REPLACEMENT_TEXT_PREFIX = "rapiderreplacementtext:"; //$NON-NLS-1$
+
+	/**
+	 * This one is used to get the sibling markers, in order to make all the replacement of a single diagnostic at once
+	 */
+	public static final String DIAGNOSTIC_ID_PREFIX = "rapiderdiagnosticid:"; //$NON-NLS-1$
+
+	public static final String REPLACEMENT_TEXT_PREFIX = "rapiderreplacementtext:"; //$NON-NLS-1$
 
 	private final ExternalToolInvoker externalToolInvoker;
 	private final IInvocationParametersProvider parametersProvider;
@@ -161,8 +167,9 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	 */
 	public void addMarker(final ProblemMarkerInfo info) {
 		RapiderProblemMarkerInfo castedInfo = (RapiderProblemMarkerInfo) info;
-		String replacementText = REPLACEMENT_TEXT_PREFIX + castedInfo.getReplacementText();
-		reportProblem(RAPIDER_PROBLEM_ID, createProblemLocation(info), info.description, replacementText);
+		String diagnosticIdArg = DIAGNOSTIC_ID_PREFIX + castedInfo.getDiagnosticId();
+		String replacementTextArg = REPLACEMENT_TEXT_PREFIX + castedInfo.getReplacementText();
+		reportProblem(RAPIDER_PROBLEM_ID, createProblemLocation(info), info.description, diagnosticIdArg, replacementTextArg);
 	}
 
 	@Deprecated

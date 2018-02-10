@@ -71,7 +71,7 @@ public class ErrorParser implements IErrorParser {
 					IFile reportedFile = eoParser.findFileName(errorFilePath);
 					if (reportedFile != null)
 					{
-						RapiderProblemMarkerInfo info = new RapiderProblemMarkerInfo(reportedFile, startChar, endChar, IMarkerGenerator.SEVERITY_WARNING,
+						RapiderProblemMarkerInfo info = new RapiderProblemMarkerInfo(reportedFile, diag.getId(), startChar, endChar, IMarkerGenerator.SEVERITY_WARNING,
 								ruleName, description, replacement.getReplacementText());
 						eoParser.addProblemMarker(info);
 					} else {
