@@ -4,7 +4,6 @@
 package fr.jayacode.rapider.checker.cxx.checker;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,13 +11,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.cdt.codan.core.CodanRuntime;
-import org.eclipse.cdt.codan.core.cxx.externaltool.ArgsSeparator;
-import org.eclipse.cdt.codan.core.cxx.externaltool.ConfigurationSettings;
 import org.eclipse.cdt.codan.core.cxx.externaltool.IInvocationParametersProvider;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationFailure;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
@@ -29,8 +24,6 @@ import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.core.model.IProblemLocation;
 import org.eclipse.cdt.codan.core.model.IProblemLocationFactory;
 import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
-import org.eclipse.cdt.codan.core.param.RootProblemPreference;
-import org.eclipse.cdt.codan.core.param.SharedRootProblemPreference;
 import org.eclipse.cdt.core.ErrorParserManager;
 import org.eclipse.cdt.core.IConsoleParser;
 import org.eclipse.cdt.core.IMarkerGenerator;
@@ -117,9 +110,8 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	 * @throws Throwable
 	 */
 	private void invokeRapider(InvocationParameters parameters) throws Throwable {
-		IConsoleParser[] parsers = new IConsoleParser[] { createErrorParserManager(parameters) };
 		try {
-			this.externalToolInvoker.invoke(parameters, parsers);
+			this.externalToolInvoker.invoke(parameters, createErrorParserManager(parameters));
 		} catch (InvocationFailure error) {
 			handleInvocationFailure(error, parameters);
 		}
