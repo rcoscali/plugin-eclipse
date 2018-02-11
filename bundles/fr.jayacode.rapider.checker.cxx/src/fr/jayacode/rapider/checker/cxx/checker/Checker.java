@@ -3,7 +3,11 @@
  */
 package fr.jayacode.rapider.checker.cxx.checker;
 
+import static org.eclipse.cdt.codan.core.cxx.internal.externaltool.Messages.ConfigurationSettings_args_format;
+import static org.eclipse.cdt.codan.core.param.IProblemPreferenceDescriptor.PreferenceType.TYPE_STRING;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,14 +22,19 @@ import org.eclipse.cdt.codan.core.cxx.externaltool.IInvocationParametersProvider
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationFailure;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParametersProvider;
+import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
+import org.eclipse.cdt.codan.core.cxx.internal.externaltool.ArgsSetting;
 import org.eclipse.cdt.codan.core.model.AbstractCheckerWithProblemPreferences;
 import org.eclipse.cdt.codan.core.model.CheckerLaunchMode;
 import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.core.model.IProblemLocation;
 import org.eclipse.cdt.codan.core.model.IProblemLocationFactory;
 import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
+import org.eclipse.cdt.codan.core.param.BasicProblemPreference;
+import org.eclipse.cdt.codan.core.param.IProblemPreference;
+import org.eclipse.cdt.codan.core.param.IProblemPreferenceDescriptor;
+import org.eclipse.cdt.codan.core.param.MapProblemPreference;
 import org.eclipse.cdt.core.ErrorParserManager;
-import org.eclipse.cdt.core.IConsoleParser;
 import org.eclipse.cdt.core.IMarkerGenerator;
 import org.eclipse.cdt.core.ProblemMarkerInfo;
 import org.eclipse.core.filesystem.URIUtil;
@@ -43,7 +52,6 @@ import fr.jayacode.rapider.checker.cxx.Messages;
  */
 public class Checker extends AbstractCheckerWithProblemPreferences implements IMarkerGenerator {
 
-	private static final String RAPIDER_TOOL_NAME = Messages.Checker_RapiderToolName;
 	private static final Collection<String> PROCESSED_EXTENSIONS = Arrays.asList("cpp", "CPP", "c", "C"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
 
 	private static final String RAPIDER_PARSER_ID = "fr.jayacode.rapider.checker.cxx.parser"; //$NON-NLS-1$
@@ -65,8 +73,6 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 
 	private final RapiderInvoker externalToolInvoker;
 	private final IInvocationParametersProvider parametersProvider;
-
-	private List<String> problemIds = new ArrayList<String>();
 
 	public Checker() {
 		this.parametersProvider = new InvocationParametersProvider();
@@ -145,9 +151,15 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	@Override
 	public void initPreferences(IProblemWorkingCopy problem) {
 		super.initPreferences(problem);
-		this.problemIds.add(problem.getId());
 		getLaunchModePreference(problem).enableInLaunchModes(CheckerLaunchMode.RUN_ON_DEMAND,
 				CheckerLaunchMode.RUN_ON_FILE_OPEN, CheckerLaunchMode.RUN_ON_FILE_SAVE);
+		addPreference(problem, new CompileCommandFileSettings(Messages.Checker_RapiderToolName, null));
+		addPreference(problem, new ArgsSetting(Messages.Checker_RapiderToolName, "")); //$NON-NLS-1$
+	}
+
+	private void addPreference(IProblemWorkingCopy problem, SingleConfigurationSetting<?> setting) {
+		IProblemPreference descriptor = (IProblemPreference) setting.getDescriptor();
+		addPreference(problem, descriptor, setting.getDefaultValue());
 	}
 
 	/*
