@@ -8,23 +8,45 @@ import org.eclipse.cdt.codan.core.param.MapProblemPreference;
 
 public final class ConfigurationSettings {
 	private final ArgsSetting args;
+	private final CompileCommandFileSettings compileCommandsFile;
+	private final String externalToolName;
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param defaultArgs
+	 */
+	/**
+	 * Constructor.
+	 * 
+	 * @param externalToolName
+	 *            Rapider's name ("Rapider", pardi !)
+	 * @param defaultCompileCommandsFile
+	 *            the default compile_commands.json file to pass when invoking the external tool.
+	 * @param defaultArgs
 	 *            the default arguments to pass when invoking the external tool.
 	 */
-	public ConfigurationSettings(String externalToolName, File defaultPath, String defaultArgs) {
+	public ConfigurationSettings(String externalToolName, File defaultCompileCommandsFile, String defaultArgs) {
+		this.compileCommandsFile = new CompileCommandFileSettings(externalToolName, defaultCompileCommandsFile);
 		this.args = new ArgsSetting(externalToolName, defaultArgs);
+		this.externalToolName = externalToolName;
+	}
+
+	public String getExternalToolName() {
+		return this.externalToolName;
 	}
 
 	/**
-	 * Returns the setting that specifies the arguments to pass when invoking the
-	 * external tool.
-	 * 
-	 * @return the setting that specifies the arguments to pass when invoking the
-	 *         external tool.
+	 * @return the setting that specifies the "compile_commands.json" file to pass
+	 * when invoking Rapider
+	 */
+	public SingleConfigurationSetting<File> getCompileCommandsFile() {
+		return this.compileCommandsFile;
+	}
+
+	/**
+	 * @return the setting that specifies the arguments to pass when invoking
+	 * Rapider.
 	 */
 	public SingleConfigurationSetting<String> getArgs() {
 		return this.args;

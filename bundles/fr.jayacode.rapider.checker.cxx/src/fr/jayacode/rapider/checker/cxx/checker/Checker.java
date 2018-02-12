@@ -3,19 +3,13 @@
  */
 package fr.jayacode.rapider.checker.cxx.checker;
 
-import static org.eclipse.cdt.codan.core.cxx.internal.externaltool.Messages.ConfigurationSettings_args_format;
-import static org.eclipse.cdt.codan.core.param.IProblemPreferenceDescriptor.PreferenceType.TYPE_STRING;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import org.eclipse.cdt.codan.core.CodanRuntime;
 import org.eclipse.cdt.codan.core.cxx.externaltool.IInvocationParametersProvider;
@@ -30,9 +24,7 @@ import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.core.model.IProblemLocation;
 import org.eclipse.cdt.codan.core.model.IProblemLocationFactory;
 import org.eclipse.cdt.codan.core.model.IProblemWorkingCopy;
-import org.eclipse.cdt.codan.core.param.BasicProblemPreference;
 import org.eclipse.cdt.codan.core.param.IProblemPreference;
-import org.eclipse.cdt.codan.core.param.IProblemPreferenceDescriptor;
 import org.eclipse.cdt.codan.core.param.MapProblemPreference;
 import org.eclipse.cdt.core.ErrorParserManager;
 import org.eclipse.cdt.core.IMarkerGenerator;
@@ -57,7 +49,6 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	private static final String RAPIDER_PARSER_ID = "fr.jayacode.rapider.checker.cxx.parser"; //$NON-NLS-1$
 	private static final String RAPIDER_PROBLEM_ID = "fr.jayacode.rapider.checker.cxx.rapiderProblem"; //$NON-NLS-1$
 
-	
 	/**
 	 * This prefix will be concatenated with replacement text to store quickfix
 	 * patches in Codan markers. Cf.
@@ -65,7 +56,8 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	 */
 
 	/**
-	 * This one is used to get the sibling markers, in order to make all the replacement of a single diagnostic at once
+	 * This one is used to get the sibling markers, in order to make all the
+	 * replacement of a single diagnostic at once
 	 */
 	public static final String DIAGNOSTIC_ID_PREFIX = "rapiderdiagnosticid:"; //$NON-NLS-1$
 
@@ -73,10 +65,12 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 
 	private final RapiderInvoker externalToolInvoker;
 	private final IInvocationParametersProvider parametersProvider;
+	private final ConfigurationSettings settings;
 
 	public Checker() {
 		this.parametersProvider = new InvocationParametersProvider();
 		this.externalToolInvoker = new RapiderInvoker();
+		this.settings = new ConfigurationSettings(Messages.Checker_RapiderToolName, null, ""); //$NON-NLS-1$
 	}
 
 	/**
@@ -98,26 +92,28 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		return false;
 	}
 
-	private void process(IResource resource) {
+	private void process(IResource fileToProcess) {
 		try {
-			InvocationParameters parameters = this.parametersProvider.createParameters(resource);
+			InvocationParameters parameters = this.parametersProvider.createParameters(fileToProcess);
 			if (parameters != null) {
+				// before launching rapider, get the settings to apply
+				updateConfigurationSettingsFromPreferences(fileToProcess);
 				invokeRapider(parameters);
 			}
 		} catch (Throwable error) {
-			logResourceProcessingFailure(error, resource);
+			logResourceProcessingFailure(error, fileToProcess);
 		}
 	}
 
-	
 	/**
 	 * Invoke Rapider
+	 * 
 	 * @param parameters
 	 * @throws Throwable
 	 */
 	private void invokeRapider(InvocationParameters parameters) throws Throwable {
 		try {
-			this.externalToolInvoker.invoke(parameters, createErrorParserManager(parameters));
+			this.externalToolInvoker.invoke(parameters, this.settings, createErrorParserManager(parameters));
 		} catch (InvocationFailure error) {
 			handleInvocationFailure(error, parameters);
 		}
@@ -127,6 +123,18 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		IProject project = parameters.getActualFile().getProject();
 		URI workingDirectory = URIUtil.toURI(parameters.getWorkingDirectory());
 		return new ErrorParserManager(project, workingDirectory, this, getParserIDs());
+	}
+
+	/**
+	 * Get the settings to apply to the Rapider launch, if the user changed it
+	 * (generaly or for the current project)
+	 * 
+	 * @param fileToProcess
+	 */
+	private void updateConfigurationSettingsFromPreferences(final IResource fileToProcess) {
+		IProblem problem = getProblemById(RAPIDER_PROBLEM_ID, fileToProcess);
+		MapProblemPreference preferences = (MapProblemPreference) problem.getPreference();
+		this.settings.updateValuesFrom(preferences);
 	}
 
 	/**
@@ -153,8 +161,8 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		super.initPreferences(problem);
 		getLaunchModePreference(problem).enableInLaunchModes(CheckerLaunchMode.RUN_ON_DEMAND,
 				CheckerLaunchMode.RUN_ON_FILE_OPEN, CheckerLaunchMode.RUN_ON_FILE_SAVE);
-		addPreference(problem, new CompileCommandFileSettings(Messages.Checker_RapiderToolName, null));
-		addPreference(problem, new ArgsSetting(Messages.Checker_RapiderToolName, "")); //$NON-NLS-1$
+		addPreference(problem, this.settings.getCompileCommandsFile());
+		addPreference(problem, this.settings.getArgs());
 	}
 
 	private void addPreference(IProblemWorkingCopy problem, SingleConfigurationSetting<?> setting) {
@@ -175,7 +183,8 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		RapiderProblemMarkerInfo castedInfo = (RapiderProblemMarkerInfo) info;
 		String diagnosticIdArg = DIAGNOSTIC_ID_PREFIX + castedInfo.getDiagnosticId();
 		String replacementTextArg = REPLACEMENT_TEXT_PREFIX + castedInfo.getReplacementText();
-		reportProblem(RAPIDER_PROBLEM_ID, createProblemLocation(info), info.description, diagnosticIdArg, replacementTextArg);
+		reportProblem(RAPIDER_PROBLEM_ID, createProblemLocation(info), info.description, diagnosticIdArg,
+				replacementTextArg);
 	}
 
 	@Deprecated
@@ -199,7 +208,6 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 	protected String[] getParserIDs() {
 		return new String[] { RAPIDER_PARSER_ID };
 	}
-
 
 	/*
 	 * (non-Javadoc) Filtre pour les commentaires de suppression du problème : si la

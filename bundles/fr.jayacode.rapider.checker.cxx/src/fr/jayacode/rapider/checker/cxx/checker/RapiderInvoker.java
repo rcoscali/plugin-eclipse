@@ -1,49 +1,36 @@
 package fr.jayacode.rapider.checker.cxx.checker;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Date;
-import java.util.Map;
-import java.util.Timer;
 
 import org.eclipse.cdt.codan.core.cxx.externaltool.ArgsSeparator;
-import org.eclipse.cdt.codan.core.cxx.externaltool.ConfigurationSettings;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationFailure;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CommandLauncher;
 import org.eclipse.cdt.core.ErrorParserManager;
 import org.eclipse.cdt.core.ICommandLauncher;
-import org.eclipse.cdt.core.IConsoleParser;
 import org.eclipse.cdt.core.resources.IConsole;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.framework.Bundle;
-import org.yaml.snakeyaml.Yaml;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
 import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 
 public class RapiderInvoker {
-	private static final String RAPIDER_TOOL_NAME = "Rapider"; //$NON-NLS-1$
 	private static final String RAPIDER_EXE_RELATIVE_PATH = "/binres/clang-tidy"; //$NON-NLS-1$
 	private static final String DEFAULT_CONTEXT_MENU_ID = "org.eclipse.cdt.ui.CDTBuildConsole"; //$NON-NLS-1$
-	public static final String EXPORT_FIXES_OPTION_KEYWORD = "-export-fixes="; //$NON-NLS-1$
-	private static final String ARGS_FORMAT = EXPORT_FIXES_OPTION_KEYWORD
-			+ "%s -p /usr/local/llvm-5.0.0/examples/Tidy/compile_commands.json -checks=*"; //$NON-NLS-1$
 	private static final NullProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
 	private File embeddedRapider = null;
 	ErrorParser parser = new ErrorParser();
@@ -53,6 +40,7 @@ public class RapiderInvoker {
 	 * 
 	 * @param parameters
 	 *            the parameters to pass to the external tool executable.
+	 * @param settings2 
 	 * @param errorParserManager
 	 *            this manager is only provided to find a resource (file) from a
 	 *            partial path. It is not used for its primary use.
@@ -63,7 +51,7 @@ public class RapiderInvoker {
 	 * @throws Throwable
 	 *             if something else goes wrong.
 	 */
-	public void invoke(InvocationParameters parameters, ErrorParserManager errorParserManager)
+	public void invoke(InvocationParameters parameters, ConfigurationSettings settings, ErrorParserManager errorParserManager)
 			throws InvocationFailure, Throwable {
 		boolean isEmbeddedRapiderUsed = Activator.getInstance().getPreferenceStore()
 				.getBoolean(PreferencePage.USE_EXTERNAL_TOOL_PREF_KEY);
@@ -80,9 +68,7 @@ public class RapiderInvoker {
 		// TODO gérer le chemin vers le compile_commands.json
 		// + si ce chemin n'est pas renseigné --> lever une exception
 		final File outFile = createExportFixesFile(parameters.getActualFile());
-		String args = String.format(ARGS_FORMAT, outFile.getAbsolutePath());
-		ConfigurationSettings settings = new ConfigurationSettings(RAPIDER_TOOL_NAME, rapiderExe, args);
-		Command command = CommandBuilder.buildCommand(parameters, settings, argsSeparator);
+		Command command = CommandBuilder.buildCommand(rapiderExe, parameters, settings, argsSeparator, outFile);
 		launchCommand(command, parameters, settings);
 		this.parser.processReport(outFile, errorParserManager);
 	}
