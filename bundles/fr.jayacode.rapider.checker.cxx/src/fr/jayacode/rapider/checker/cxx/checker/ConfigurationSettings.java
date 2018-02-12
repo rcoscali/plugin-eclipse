@@ -64,6 +64,7 @@ public final class ConfigurationSettings {
 	 */
 	public void updateValuesFrom(MapProblemPreference preferences) {
 		this.args.updateValue(preferences);
+		this.compileCommandsFile.updateValue(preferences);
 	}
 
 }
