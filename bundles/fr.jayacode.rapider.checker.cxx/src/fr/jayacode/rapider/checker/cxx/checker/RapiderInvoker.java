@@ -6,7 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.cdt.codan.core.cxx.externaltool.ArgsSeparator;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationFailure;
@@ -18,7 +21,9 @@ import org.eclipse.cdt.core.ICommandLauncher;
 import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -30,6 +35,7 @@ import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 
 public class RapiderInvoker {
 	private static final String RAPIDER_EXE_RELATIVE_PATH = "/binres/clang-tidy"; //$NON-NLS-1$
+	private static final String RAPIDER_LIB_RELATIVE_PATH = "/binres/lib"; //$NON-NLS-1$
 	private static final String DEFAULT_CONTEXT_MENU_ID = "org.eclipse.cdt.ui.CDTBuildConsole"; //$NON-NLS-1$
 	private static final NullProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
 	private File embeddedRapider = null;
@@ -40,7 +46,7 @@ public class RapiderInvoker {
 	 * 
 	 * @param parameters
 	 *            the parameters to pass to the external tool executable.
-	 * @param settings2 
+	 * @param settings
 	 * @param errorParserManager
 	 *            this manager is only provided to find a resource (file) from a
 	 *            partial path. It is not used for its primary use.
@@ -51,8 +57,8 @@ public class RapiderInvoker {
 	 * @throws Throwable
 	 *             if something else goes wrong.
 	 */
-	public void invoke(InvocationParameters parameters, ConfigurationSettings settings, ErrorParserManager errorParserManager)
-			throws InvocationFailure, Throwable {
+	public void invoke(InvocationParameters parameters, ConfigurationSettings settings,
+			ErrorParserManager errorParserManager) throws InvocationFailure, Throwable {
 		boolean isEmbeddedRapiderUsed = Activator.getInstance().getPreferenceStore()
 				.getBoolean(PreferencePage.USE_EXTERNAL_TOOL_PREF_KEY);
 		File rapiderExe;
@@ -68,7 +74,8 @@ public class RapiderInvoker {
 		// TODO gérer le chemin vers le compile_commands.json
 		// + si ce chemin n'est pas renseigné --> lever une exception
 		final File outFile = createExportFixesFile(parameters.getActualFile());
-		Command command = CommandBuilder.buildCommand(rapiderExe, parameters, settings, argsSeparator, outFile);
+		Command command = CommandBuilder.buildCommand(rapiderExe, parameters, settings, argsSeparator, outFile,
+				buildEnvs());
 		launchCommand(command, parameters, settings);
 		this.parser.processReport(outFile, errorParserManager);
 	}
@@ -142,26 +149,14 @@ public class RapiderInvoker {
 			throw new FileNotFoundException("Can not find embedded Rapider");
 		}
 
-		final File tempFile = File.createTempFile("RapiderTmp", Long.toString(System.currentTimeMillis())); //$NON-NLS-1$
-		tempFile.deleteOnExit(); // the temporary file will be deleted as soon as Java quits
-
-		try (InputStream inputStream = url.openConnection().getInputStream();
-				OutputStream fileStream = new FileOutputStream(tempFile);) {
-
-			final byte[] buf = new byte[1024];
-			int i = 0;
-
-			// copy the content of the embedded Rapider to the temporary one.
-			while ((i = inputStream.read(buf)) != -1) {
-				fileStream.write(buf, 0, i);
-			}
-
+		try {
+			this.embeddedRapider = new File(FileLocator.resolve(url).toURI());
+		} catch (URISyntaxException e) {
+		    e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+		    e.printStackTrace();
 		}
-
-		tempFile.setExecutable(true, true);
-		this.embeddedRapider = tempFile;
+		
 		return this.embeddedRapider;
 	}
 
@@ -172,6 +167,29 @@ public class RapiderInvoker {
 		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
 		URL fileURL = bundle.getEntry(RAPIDER_EXE_RELATIVE_PATH);
 		return fileURL;
+	}
+
+	/**
+	 * Build the list of environment variables in variable=value format
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	private static List<String> buildEnvs() throws IOException {
+		
+		final String LD_LIBRARY_PATH_PREFIX = "LD_LIBRARY_PATH="; //$NON-NLS-1$
+		final String LD_PRELOAD_PREFIX = "LD_PRELOAD="; //$NON-NLS-1$
+		List<String> envs = new ArrayList<String>();
+
+		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+		URL fileURL = bundle.getEntry(RAPIDER_LIB_RELATIVE_PATH);
+		Assert.isNotNull(fileURL);
+		fileURL = FileLocator.toFileURL(fileURL);
+
+		String libDirPath = fileURL.getPath();
+		envs.add(LD_LIBRARY_PATH_PREFIX + libDirPath);
+		envs.add(LD_PRELOAD_PREFIX + "/usr/lib64/libstdc++.so.6");
+		return envs;
 	}
 
 }

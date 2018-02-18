@@ -21,7 +21,7 @@ public class CommandBuilder {
 	private static final String APPLY_ALL_RULES_OPTION_VALUE = "*"; //$NON-NLS-1$
 
 	public static Command buildCommand(final File rapiderExe, final InvocationParameters parameters,
-			final ConfigurationSettings settings, final ArgsSeparator argsSeparator, final File exportFixesFile) {
+			final ConfigurationSettings settings, final ArgsSeparator argsSeparator, final File exportFixesFile, List<String> envs) {
 		List<String> args = new ArrayList<String>();
 
 		// add the export-fixes file to the args
@@ -40,7 +40,7 @@ public class CommandBuilder {
 		// last, the file to process
 		args.add(parameters.getActualFilePath());
 
-		return new Command(new Path(rapiderExe.getAbsolutePath()), args.toArray(new String[args.size()]));
+		return new Command(new Path(rapiderExe.getAbsolutePath()), args.toArray(new String[args.size()]), envs.toArray(new String[envs.size()]));
 	}
 
 	/**
