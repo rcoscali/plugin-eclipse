@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Eclipse-BundleShape: dir
+Bundle-ManifestVersion: 2
+Bundle-Name: Llvm
+Bundle-SymbolicName: fr.jayacode.rapider.checker.cxx.llvm
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: fr.jayacode.rapider.checker.cxx.core;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
