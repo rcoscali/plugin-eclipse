@@ -12,6 +12,7 @@
     </parent>
 
     <modules>
+        <module>fr.jayacode.rapider.checker.cxx</module>
         <module>fr.jayacode.rapider.checker.cxx.core</module>
         <module>fr.jayacode.rapider.checker.cxx.llvm</module>
         <module>fr.jayacode.rapider.checker.cxx.nl_fr</module>
