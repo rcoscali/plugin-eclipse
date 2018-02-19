@@ -11,7 +11,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  */
 public class Activator extends AbstractUIPlugin {
 
-	public static String PLUGIN_ID = "fr.jayacode.rapider.checker.cxx"; //$NON-NLS-1$
+	public static String PLUGIN_ID = "fr.jayacode.rapider.checker.cxx.core"; //$NON-NLS-1$
 	private static Activator fgCPlugin;
 
 	/**

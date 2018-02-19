@@ -3,13 +3,8 @@
  */
 package fr.jayacode.rapider.checker.cxx.quickfix;
 
-import java.util.Map;
-
-import org.eclipse.cdt.codan.core.model.IProblem;
-import org.eclipse.cdt.codan.internal.core.model.CodanProblemMarker;
 import org.eclipse.cdt.codan.ui.AbstractCodanCMarkerResolution;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
@@ -51,7 +46,7 @@ public class MarkerResolution extends AbstractCodanCMarkerResolution implements 
 
 	@Override
 	public void apply(IMarker marker, IDocument document) {
-		// TODO Auto-generated method stub
+		// TODO Encore en chantier
 		// int startChar = MarkerUtilities.getCharStart(marker);
 		// int endChar = MarkerUtilities.getCharEnd(marker);
 		// String replacementString = marker.getAttribute("patch", "");

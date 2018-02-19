@@ -4,6 +4,6 @@ Bundle-Name: Translation package for French
 Bundle-SymbolicName: fr.jayacode.rapider.checker.cxx.nl_fr
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
-Fragment-Host: fr.jayacode.rapider.checker.cxx;bundle-version="1.0.0"
+Fragment-Host: fr.jayacode.rapider.checker.cxx.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Localization: OSGI-INF/l10n/bundle

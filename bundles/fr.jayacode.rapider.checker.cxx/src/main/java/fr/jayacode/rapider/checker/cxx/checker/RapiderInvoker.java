@@ -2,10 +2,7 @@ package fr.jayacode.rapider.checker.cxx.checker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,11 +18,11 @@ import org.eclipse.cdt.core.ICommandLauncher;
 import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.framework.Bundle;
@@ -34,8 +31,8 @@ import fr.jayacode.rapider.checker.cxx.Activator;
 import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 
 public class RapiderInvoker {
-	private static final String RAPIDER_EXE_RELATIVE_PATH = "/binres/clang-tidy"; //$NON-NLS-1$
-	private static final String RAPIDER_LIB_RELATIVE_PATH = "/binres/lib"; //$NON-NLS-1$
+	private static final String RAPIDER_EXE_RELATIVE_PATH = "/bin/clang-tidy"; //$NON-NLS-1$
+	private static final String RAPIDER_LIB_RELATIVE_PATH = "/bin/lib"; //$NON-NLS-1$
 	private static final String DEFAULT_CONTEXT_MENU_ID = "org.eclipse.cdt.ui.CDTBuildConsole"; //$NON-NLS-1$
 	private static final NullProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
 	private File embeddedRapider = null;
@@ -142,8 +139,7 @@ public class RapiderInvoker {
 			return this.embeddedRapider;
 		}
 
-		// executable file is not know yet -> we have to find it and extract it if
-		// necessary
+		// executable file is not know yet -> we have to find it
 		final URL url = getRapiderURL();
 		if (url == null) {
 			throw new FileNotFoundException("Can not find embedded Rapider");
@@ -164,32 +160,43 @@ public class RapiderInvoker {
 	 * @return the URL of the Rapider executable, null if not found
 	 */
 	private static URL getRapiderURL() {
-		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-		URL fileURL = bundle.getEntry(RAPIDER_EXE_RELATIVE_PATH);
-		return fileURL;
+		return findUrlInBundle(RAPIDER_EXE_RELATIVE_PATH);
 	}
 
 	/**
-	 * Build the list of environment variables in variable=value format
+	 * Builds the list of environment variables in variable=value format
 	 * 
-	 * @return
+	 * @return the list of environment variables
 	 * @throws IOException 
 	 */
 	private static List<String> buildEnvs() throws IOException {
 		
 		final String LD_LIBRARY_PATH_PREFIX = "LD_LIBRARY_PATH="; //$NON-NLS-1$
-		final String LD_PRELOAD_PREFIX = "LD_PRELOAD="; //$NON-NLS-1$
+		final String LD_PRELOAD_VARENV = "LD_PRELOAD=/usr/lib64/libstdc++.so.6"; //$NON-NLS-1$
 		List<String> envs = new ArrayList<String>();
 
-		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-		URL fileURL = bundle.getEntry(RAPIDER_LIB_RELATIVE_PATH);
-		Assert.isNotNull(fileURL);
+		URL fileURL = findUrlInBundle(RAPIDER_LIB_RELATIVE_PATH);
+
+		if (fileURL == null) {
+			throw new FileNotFoundException("Can not find Rapider's dependencies");
+		}
+
 		fileURL = FileLocator.toFileURL(fileURL);
 
 		String libDirPath = fileURL.getPath();
 		envs.add(LD_LIBRARY_PATH_PREFIX + libDirPath);
-		envs.add(LD_PRELOAD_PREFIX + "/usr/lib64/libstdc++.so.6");
+		envs.add(LD_PRELOAD_VARENV); //$NON-NLS-1$
 		return envs;
 	}
 
+	/**
+	 * Finds a file or a dir in the bundle. It explores the fragments too.
+	 * The path should be relative to the root of the bundle.
+	 * @param relativePath
+	 * @return the url corresponding to the path, null of it does not exist.
+	 */
+	private static URL findUrlInBundle(final String relativePath) {
+		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+		return FileLocator.find(bundle, new Path(relativePath), null);
+	}
 }

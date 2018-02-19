@@ -1,8 +1,7 @@
 Manifest-Version: 1.0
-Eclipse-BundleShape: dir
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: fr.jayacode.rapider.checker.cxx;singleton:=true
+Bundle-SymbolicName: fr.jayacode.rapider.checker.cxx.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

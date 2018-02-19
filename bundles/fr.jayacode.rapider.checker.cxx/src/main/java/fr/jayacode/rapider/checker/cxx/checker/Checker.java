@@ -17,7 +17,6 @@ import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationFailure;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParametersProvider;
 import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
-import org.eclipse.cdt.codan.core.cxx.internal.externaltool.ArgsSetting;
 import org.eclipse.cdt.codan.core.model.AbstractCheckerWithProblemPreferences;
 import org.eclipse.cdt.codan.core.model.CheckerLaunchMode;
 import org.eclipse.cdt.codan.core.model.IProblem;

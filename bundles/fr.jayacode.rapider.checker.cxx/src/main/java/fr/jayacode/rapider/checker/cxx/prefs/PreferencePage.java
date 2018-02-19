@@ -23,8 +23,8 @@ import fr.jayacode.rapider.checker.cxx.Activator;
  */
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public static final String USE_EXTERNAL_TOOL_PREF_KEY = "UseExternalRapider";
-	public static final String EXTERNAL_TOOL_PATH_PREF_KEY = "ExternalRapiderPath";
+	public static final String USE_EXTERNAL_TOOL_PREF_KEY = "UseExternalRapider"; //$NON-NLS-1$
+	public static final String EXTERNAL_TOOL_PATH_PREF_KEY = "ExternalRapiderPath"; //$NON-NLS-1$
 	private FileFieldEditor pathField;
 	private BooleanFieldEditor useEmbeddedField;
 	
