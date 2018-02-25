@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.core.ErrorParserManager;
 import org.eclipse.cdt.core.IMarkerGenerator;
 import org.eclipse.core.resources.IFile;
@@ -16,7 +17,6 @@ import org.eclipse.core.runtime.Assert;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 
@@ -53,7 +53,9 @@ public class ErrorParser {
 			}
 
 			for (Diagnostic diag : report.getDiagnostics()) {
-				String ruleName = diag.getDiagnosticName();
+				String ruleName = StringUtils.defaultString(diag.getDiagnosticName(), "Rapider undefined rule");
+				String description = StringUtils.defaultString(diag.getMessage(), "Rapider undefined error");
+				String message = String.format("%s : %s", ruleName, description); //$NON-NLS-1$
 
 				if (diag.getReplacements() == null) {
 					continue;
@@ -64,9 +66,6 @@ public class ErrorParser {
 					int startChar = replacement.getOffset();
 					int endChar = startChar + replacement.getLength();
 					@SuppressWarnings("boxing")
-					String description = String.format(
-							"TODO : avoir la description pour l'erreur [%s/%d/%d] de type %s", reportedFileName,
-							startChar, endChar, ruleName);
 					IFile reportedFile = eoParser.findFileName(errorFilePath);
 					boolean everythingIsInOrder = (reportedFile != null) && (errorFilePath != null);
 					if (everythingIsInOrder) {
@@ -105,7 +104,6 @@ public class ErrorParser {
 		diagnosticDescription.addPropertyParameters("Replacements", Replacement.class); //$NON-NLS-1$
 		constructor.addTypeDescription(diagnosticDescription);
 
-		
 		PropertyUtils putils = new PropertyUtils();
 		putils.setSkipMissingProperties(true);
 		constructor.setPropertyUtils(putils);
@@ -131,7 +129,6 @@ public class ErrorParser {
 
 		public ParsingErrorException(String message, Throwable cause) {
 			super(message, cause);
-			// TODO Auto-generated constructor stub
 		}
 	}
 
