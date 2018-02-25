@@ -139,12 +139,12 @@
             category="org.eclipse.cdt.codan.ui.preferences.CodanPreferencePage"
             class="fr.jayacode.rapider.checker.cxx.prefs.PreferencePage"
             id="fr.jayacode.rapider.checker.cxx.prefs.page1"
-            name="Rapider">
+            name="%preferencesPage.name">
       </page>
    </extension>
    <extension
          id="fr.jayacode.rapider.checker.cxx.prefs"
-         name="Rapider Preferences"
+         name="%preferencesExtension.name"
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="fr.jayacode.rapider.checker.cxx.prefs.PreferenceInitializer">
