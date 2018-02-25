@@ -9,6 +9,7 @@
 		<tycho.version>0.26.0</tycho.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<p2-repo.url>http://download.eclipse.org/releases/oxygen/</p2-repo.url>
+		<RAPIDER_CXX_VERSION>${project.version}</RAPIDER_CXX_VERSION>
 	</properties>
 
 	<repositories>
@@ -66,4 +67,19 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>fr.jayacode.rapider</groupId>
+				<artifactId>fr.jayacode.rapider.checker.cxx.core</artifactId>
+				<version>${RAPIDER_CXX_VERSION}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

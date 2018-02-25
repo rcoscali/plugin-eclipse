@@ -1,0 +1,35 @@
+---
+MainSourceFile:  /home/user/workspace/Tidy/ex.c
+Diagnostics:     
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         'Cannot parse invalid groups file ''request_groups.json''!'
+    Surnum1:         'je ne sert à rien'
+    FilePath:        ''
+    Replacements:    
+  - DiagnosticName:  clang-diagnostic-error
+    Message:         '''stddef.h'' file not found'
+    FilePath:        /usr/include/stdio.h
+    Replacements:    
+  - DiagnosticName:  llvm-include-order
+    Message:         '#includes are not sorted properly'
+    FilePath:        ex.c
+    Replacements:    
+      - FilePath:        ex.c
+        Surnum2:         'moi non plus'
+        Surnum3:         'et moi non plus'
+        Offset:          9
+        Length:          9
+        ReplacementText: '<alloca.h>'
+      - FilePath:        ex.c
+        Offset:          28
+        Length:          10
+        ReplacementText: '<stdio.h>'
+      - FilePath:        ex.c
+        Offset:          48
+        Length:          10
+        ReplacementText: '<stdlib.h>'
+      - FilePath:        ex.c
+        Offset:          68
+        Length:          10
+        ReplacementText: '<string.h>'
+
