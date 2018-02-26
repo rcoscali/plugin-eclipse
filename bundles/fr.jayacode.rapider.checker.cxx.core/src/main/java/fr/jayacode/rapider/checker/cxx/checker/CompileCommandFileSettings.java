@@ -8,6 +8,8 @@ import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
 import org.eclipse.cdt.codan.core.param.BasicProblemPreference;
 import org.eclipse.cdt.codan.core.param.IProblemPreferenceDescriptor;
 
+import fr.jayacode.rapider.checker.cxx.Messages;
+
 public class CompileCommandFileSettings extends SingleConfigurationSetting<File> {
 
 	static final String KEY = "RapiderCompileCommandPath"; //$NON-NLS-1$
@@ -23,7 +25,7 @@ public class CompileCommandFileSettings extends SingleConfigurationSetting<File>
 	}
 
 	private static IProblemPreferenceDescriptor newPreferenceDescriptor(String externalToolName) {
-		String label = String.format("Path to compile_commands.json file (if empty, Rapider will search for a faile called \"compile_commands.json\" located at the project root)", externalToolName);
+		String label = String.format(Messages.CompileCommandFileSettings_label, externalToolName);
 		return new BasicProblemPreference(KEY, label, TYPE_FILE);
 	}
 }

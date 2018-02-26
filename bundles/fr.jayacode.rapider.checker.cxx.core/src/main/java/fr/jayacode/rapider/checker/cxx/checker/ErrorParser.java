@@ -21,6 +21,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
+import fr.jayacode.rapider.checker.cxx.Messages;
 import fr.jayacode.rapider.checker.cxx.model.Diagnostic;
 import fr.jayacode.rapider.checker.cxx.model.RapiderReport;
 import fr.jayacode.rapider.checker.cxx.model.Replacement;
@@ -53,8 +54,8 @@ public class ErrorParser {
 			}
 
 			for (Diagnostic diag : report.getDiagnostics()) {
-				String ruleName = StringUtils.defaultString(diag.getDiagnosticName(), "Rapider undefined rule");
-				String description = StringUtils.defaultString(diag.getMessage(), "Rapider undefined error");
+				String ruleName = StringUtils.defaultString(diag.getDiagnosticName(), Messages.ErrorParser_undefined_rule);
+				String description = StringUtils.defaultString(diag.getMessage(), Messages.ErrorParser_undefined_error);
 				String message = String.format("%s : %s", ruleName, description); //$NON-NLS-1$
 
 				if (diag.getReplacements() == null) {
@@ -78,7 +79,7 @@ public class ErrorParser {
 			}
 
 		} catch (ParsingErrorException e) {
-			Activator.logError(String.format("An error occured while parsing file : %s", exportFile), e);
+			Activator.logError(String.format(Messages.ErrorParser_parsing_error_log, exportFile), e);
 		}
 
 		return false;
@@ -114,12 +115,12 @@ public class ErrorParser {
 			report = (RapiderReport) yaml.load(str);
 		} catch (FileNotFoundException e) {
 			throw new ParsingErrorException(
-					String.format("Error while reading export file %s : file not found", file.getAbsolutePath()), e);
+					String.format(Messages.ErrorParser_file_not_found_exception_message, file.getAbsolutePath()), e);
 		} catch (YAMLException e) {
-			throw new ParsingErrorException(String.format("Error while parsing export file %s", file.getAbsolutePath()),
+			throw new ParsingErrorException(String.format(Messages.ErrorParser_parsing_error_exception_message, file.getAbsolutePath()),
 					e);
 		} catch (IOException e1) {
-			Activator.logWarning(String.format("Error while closing file %s", file.getAbsolutePath()));
+			Activator.logWarning(String.format(Messages.ErrorParser_file_closing_exception_error_message, file.getAbsolutePath()));
 		}
 		return report;
 	}

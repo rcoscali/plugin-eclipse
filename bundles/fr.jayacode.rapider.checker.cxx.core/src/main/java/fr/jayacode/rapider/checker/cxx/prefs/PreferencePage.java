@@ -16,6 +16,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
+import fr.jayacode.rapider.checker.cxx.Messages;
 
 /**
  * @author cconversin
@@ -84,9 +85,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	@Override
 	protected void createFieldEditors() {
-		this.useEmbeddedField = new BooleanFieldEditor(USE_EXTERNAL_TOOL_PREF_KEY, "Use embedded Rapider", getFieldEditorParent());
+		this.useEmbeddedField = new BooleanFieldEditor(USE_EXTERNAL_TOOL_PREF_KEY, Messages.PreferencePage_use_embedded_rapider_label, getFieldEditorParent());
 		this.pathFieldParent = getFieldEditorParent();
-		this.pathField = new FileFieldEditor(EXTERNAL_TOOL_PATH_PREF_KEY, "Path to Rapider:", this.pathFieldParent); 
+		this.pathField = new FileFieldEditor(EXTERNAL_TOOL_PATH_PREF_KEY, Messages.PreferencePage_path_to_rapider_label, this.pathFieldParent); 
         addField(this.useEmbeddedField);
         addField(this.pathField);
         boolean isEmbeddedRapiderused = getPreferenceStore().getBoolean(USE_EXTERNAL_TOOL_PREF_KEY); 

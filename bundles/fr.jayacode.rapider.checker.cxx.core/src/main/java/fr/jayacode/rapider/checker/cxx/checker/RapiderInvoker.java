@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.framework.Bundle;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
+import fr.jayacode.rapider.checker.cxx.Messages;
 import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 
 public class RapiderInvoker {
@@ -92,7 +93,7 @@ public class RapiderInvoker {
 		final IPath commandPath = command.getPath();
 		final String[] commandArgs = command.getArgs();
 		final String[] commandEnv = command.getEnv();
-		NULL_PROGRESS_MONITOR.beginTask("Launching " + toolName, 100);
+		NULL_PROGRESS_MONITOR.beginTask(Messages.RapiderInvoker_monitor_launching_message + toolName, 100);
 		IConsole c = CCorePlugin.getDefault().getConsole(null, DEFAULT_CONTEXT_MENU_ID, toolName, null);
 
 		// Start Build Console so we can get the OutputStream and ErrorStream properly.
@@ -142,7 +143,7 @@ public class RapiderInvoker {
 		// executable file is not know yet -> we have to find it
 		final URL url = getRapiderURL();
 		if (url == null) {
-			throw new FileNotFoundException("Can not find embedded Rapider");
+			throw new FileNotFoundException(Messages.RapiderInvoker_file_not_found_exception_message);
 		}
 
 		try {
@@ -178,7 +179,7 @@ public class RapiderInvoker {
 		URL fileURL = findUrlInBundle(RAPIDER_LIB_RELATIVE_PATH);
 
 		if (fileURL == null) {
-			throw new FileNotFoundException("Can not find Rapider's dependencies");
+			throw new FileNotFoundException(Messages.RapiderInvoker_dependencies_not_found_exception_message);
 		}
 
 		fileURL = FileLocator.toFileURL(fileURL);
