@@ -231,15 +231,16 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		try {
 			InputStream content = file.getContents();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-			String line = new String();
-			for (int i = 0; i < loc.getLineNumber(); i++) {
-				line = reader.readLine();
+			reader.skip(loc.getStartingChar());
+			String line = reader.readLine();
+			if (line != null) {
+				return !line.contains(suppressionComment);
 			}
-			return !line.contains(suppressionComment);
+			return true;
 		} catch (CoreException | IOException e) {
-			// TODO : print stack ?
+			int i = 2;
 		}
 		return super.shouldProduceProblem(problem, loc, args);
 	}
-
+	
 }
