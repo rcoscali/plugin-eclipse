@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.core.ErrorParserManager;
+import org.eclipse.cdt.core.IErrorParser;
 import org.eclipse.cdt.core.IMarkerGenerator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
@@ -31,7 +32,7 @@ import fr.jayacode.rapider.checker.cxx.model.Replacement;
  * 
  * @author cconversin
  */
-public class ErrorParser {
+public class ErrorParser implements IErrorParser {
 
 	public ErrorParser() {
 	}
@@ -54,7 +55,8 @@ public class ErrorParser {
 			}
 
 			for (Diagnostic diag : report.getDiagnostics()) {
-				String ruleName = StringUtils.defaultString(diag.getDiagnosticName(), Messages.ErrorParser_undefined_rule);
+				String ruleName = StringUtils.defaultString(diag.getDiagnosticName(),
+						Messages.ErrorParser_undefined_rule);
 				String description = StringUtils.defaultString(diag.getMessage(), Messages.ErrorParser_undefined_error);
 				String message = String.format("%s : %s", ruleName, description); //$NON-NLS-1$
 
@@ -117,10 +119,11 @@ public class ErrorParser {
 			throw new ParsingErrorException(
 					String.format(Messages.ErrorParser_file_not_found_exception_message, file.getAbsolutePath()), e);
 		} catch (YAMLException e) {
-			throw new ParsingErrorException(String.format(Messages.ErrorParser_parsing_error_exception_message, file.getAbsolutePath()),
-					e);
+			throw new ParsingErrorException(
+					String.format(Messages.ErrorParser_parsing_error_exception_message, file.getAbsolutePath()), e);
 		} catch (IOException e1) {
-			Activator.logWarning(String.format(Messages.ErrorParser_file_closing_exception_error_message, file.getAbsolutePath()));
+			Activator.logWarning(
+					String.format(Messages.ErrorParser_file_closing_exception_error_message, file.getAbsolutePath()));
 		}
 		return report;
 	}
@@ -131,6 +134,13 @@ public class ErrorParser {
 		public ParsingErrorException(String message, Throwable cause) {
 			super(message, cause);
 		}
+	}
+
+	@Override
+	public boolean processLine(String line, ErrorParserManager eoParser) {
+		// do nothing. This method is just there to justify the fact that this class
+		// must implements IErrorParser
+		return false;
 	}
 
 }
