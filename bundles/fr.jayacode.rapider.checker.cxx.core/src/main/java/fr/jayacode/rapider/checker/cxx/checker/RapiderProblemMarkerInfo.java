@@ -1,7 +1,13 @@
 package fr.jayacode.rapider.checker.cxx.checker;
 
+import java.io.IOException;
+
 import org.eclipse.cdt.core.ProblemMarkerInfo;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+
+import fr.jayacode.rapider.checker.cxx.Activator;
+import utils.FileUtils;
 
 /**
  * Convenience class for acessing rapider specific values in the
@@ -16,12 +22,18 @@ public class RapiderProblemMarkerInfo extends ProblemMarkerInfo {
 	private static final String RAPIDER_DIAGNOSTIC_ID_KEY = "RAPIDER_DIAGNOSTIC_ID_KEY"; //$NON-NLS-1$
 	private static final String RAPIDER_REPLACEMENT_TEXT_KEY = "RAPIDER_REPLACEMENT_TEXT_KEY"; //$NON-NLS-1$
 
-	public RapiderProblemMarkerInfo(IResource file, int diagnosticId, int startChar, int endChar, int severity, String ruleName,
+	@SuppressWarnings("boxing")
+	public RapiderProblemMarkerInfo(IFile file, int diagnosticId, int startChar, int endChar, int severity, String ruleName,
 			String description, String replacementText) {
 		super(file, -1, startChar, endChar, description, severity, null);
 		this.setDiagnosticId(diagnosticId);
 		this.setRuleName(ruleName);
 		this.setReplacementText(replacementText);
+		try {
+			this.lineNumber = FileUtils.getLineNumberFromOffset(file, startChar);
+		} catch (IOException | CoreException e) {
+			Activator.logWarning(String.format("Error while processing line number for offset %d in file %s", startChar, file.getFullPath()));
+		}
 	}
 
 	public String getRuleName() {
