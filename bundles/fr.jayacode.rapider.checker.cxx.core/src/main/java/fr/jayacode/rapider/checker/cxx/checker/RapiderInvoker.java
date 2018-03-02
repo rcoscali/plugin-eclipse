@@ -132,10 +132,11 @@ public class RapiderInvoker {
 	 * executable is contained in the bundle's jar, it is extracted in a temporary
 	 * file that will be deleted once Eclipse returns.
 	 * 
-	 * @return
-	 * @throws IOException
+	 * @return the file
+	 * @throws IOException 
+	 * @throws URISyntaxException 
 	 */
-	private File getEmbeddedRapider() throws IOException {
+	private File getEmbeddedRapider() throws URISyntaxException, IOException {
 		if (this.embeddedRapider != null) {
 			return this.embeddedRapider;
 		}
@@ -146,14 +147,9 @@ public class RapiderInvoker {
 			throw new FileNotFoundException(Messages.RapiderInvoker_file_not_found_exception_message);
 		}
 
-		try {
-			this.embeddedRapider = new File(FileLocator.resolve(url).toURI());
-		} catch (URISyntaxException e) {
-		    e.printStackTrace();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-		
+		this.embeddedRapider = new File(FileLocator.resolve(url).toURI());
+		this.embeddedRapider.setExecutable(true, false);
+
 		return this.embeddedRapider;
 	}
 
@@ -168,10 +164,10 @@ public class RapiderInvoker {
 	 * Builds the list of environment variables in variable=value format
 	 * 
 	 * @return the list of environment variables
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private static List<String> buildEnvs() throws IOException {
-		
+
 		final String LD_LIBRARY_PATH_PREFIX = "LD_LIBRARY_PATH="; //$NON-NLS-1$
 		final String LD_PRELOAD_VARENV = "LD_PRELOAD=/usr/lib64/libstdc++.so.6"; //$NON-NLS-1$
 		List<String> envs = new ArrayList<String>();
@@ -186,13 +182,14 @@ public class RapiderInvoker {
 
 		String libDirPath = fileURL.getPath();
 		envs.add(LD_LIBRARY_PATH_PREFIX + libDirPath);
-		envs.add(LD_PRELOAD_VARENV); //$NON-NLS-1$
+		envs.add(LD_PRELOAD_VARENV); // $NON-NLS-1$
 		return envs;
 	}
 
 	/**
-	 * Finds a file or a dir in the bundle. It explores the fragments too.
-	 * The path should be relative to the root of the bundle.
+	 * Finds a file or a dir in the bundle. It explores the fragments too. The path
+	 * should be relative to the root of the bundle.
+	 * 
 	 * @param relativePath
 	 * @return the url corresponding to the path, null of it does not exist.
 	 */
