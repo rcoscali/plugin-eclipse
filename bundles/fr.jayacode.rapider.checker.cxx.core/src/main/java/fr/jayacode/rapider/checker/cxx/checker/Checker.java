@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
 import fr.jayacode.rapider.checker.cxx.Messages;
+import utils.FileUtils;
 
 /**
  * @author cconversin
@@ -224,21 +225,17 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 			return super.shouldProduceProblem(problem, loc, args);
 		}
 		IResource resource = loc.getFile();
-		if (!(resource instanceof IFile)) {
+		if (!(resource instanceof IFile && resource.exists())) {
 			return false;
 		}
+		
 		IFile file = (IFile) resource;
 		try {
-			InputStream content = file.getContents();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-			reader.skip(loc.getStartingChar());
-			String line = reader.readLine();
-			if (line != null) {
-				return !line.contains(suppressionComment);
+			if (FileUtils.doesLineContains(file, loc.getStartingChar(), suppressionComment)) {
+				return false;
 			}
-			return true;
-		} catch (CoreException | IOException e) {
-			int i = 2;
+		} catch (IOException | CoreException e) {
+			// do nothing
 		}
 		return super.shouldProduceProblem(problem, loc, args);
 	}
