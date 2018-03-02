@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Translation package for French
+Bundle-Name: Pack de traductions FR de Rapider
 Bundle-SymbolicName: fr.jayacode.rapider.checker.cxx.nl_fr
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
