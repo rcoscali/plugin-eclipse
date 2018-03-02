@@ -51,9 +51,9 @@ public class ErrorParser implements IErrorParser {
 			}
 
 			// report is not empty
-			String reportedFileName = report.getMainSourceFile();
 
 			if (report.getDiagnostics() == null) {
+				// no diagnostic in report -> get out of here
 				break construct;
 			}
 
@@ -64,6 +64,7 @@ public class ErrorParser implements IErrorParser {
 				String message = String.format("%s : %s", ruleName, description); //$NON-NLS-1$
 
 				if (diag.getReplacements() == null) {
+					// no replacements in diagnostic -> next !
 					continue;
 				}
 
@@ -71,7 +72,7 @@ public class ErrorParser implements IErrorParser {
 					String errorFilePath = replacement.getFilePath();
 					IFile reportedFile = eoParser.findFileName(errorFilePath);
 					if (! reportedFile.exists()) {
-						Activator.logWarning(String.format("file %s does not exist on the file system", errorFilePath));
+						Activator.logWarning(String.format(Messages.ErrorParser_inexistant_file, errorFilePath));
 						continue;
 					}
 
@@ -80,7 +81,7 @@ public class ErrorParser implements IErrorParser {
 					boolean everythingIsInOrder = (reportedFile != null) && (errorFilePath != null);
 					if (everythingIsInOrder) {
 						RapiderProblemMarkerInfo info = new RapiderProblemMarkerInfo(reportedFile, diag.getId(),
-								startChar, endChar, IMarkerGenerator.SEVERITY_WARNING, ruleName, description,
+								startChar, endChar, IMarkerGenerator.SEVERITY_WARNING, ruleName, message,
 								replacement.getReplacementText());
 						eoParser.addProblemMarker(info);
 					}

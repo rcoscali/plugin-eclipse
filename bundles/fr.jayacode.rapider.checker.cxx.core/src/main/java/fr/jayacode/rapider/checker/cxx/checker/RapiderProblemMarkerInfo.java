@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
+import fr.jayacode.rapider.checker.cxx.Messages;
 import utils.FileUtils;
 
 /**
@@ -32,7 +33,7 @@ public class RapiderProblemMarkerInfo extends ProblemMarkerInfo {
 		try {
 			this.lineNumber = FileUtils.getLineNumberFromOffset(file, startChar);
 		} catch (IOException | CoreException e) {
-			Activator.logWarning(String.format("Error while processing line number for offset %d in file %s", startChar, file.getFullPath()));
+			Activator.logWarning(String.format(Messages.RapiderProblemMarkerInfo_line_number_processing_error, startChar, file.getFullPath()));
 		}
 	}
 
