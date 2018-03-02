@@ -13,8 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.core.ErrorParserManager;
 import org.eclipse.cdt.core.IErrorParser;
 import org.eclipse.cdt.core.IMarkerGenerator;
+import org.eclipse.core.internal.utils.FileUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -26,6 +28,7 @@ import fr.jayacode.rapider.checker.cxx.Messages;
 import fr.jayacode.rapider.checker.cxx.model.Diagnostic;
 import fr.jayacode.rapider.checker.cxx.model.RapiderReport;
 import fr.jayacode.rapider.checker.cxx.model.Replacement;
+import utils.FileUtils;
 
 /**
  * Class in charge of processing outstream from rapider into problem markers.
@@ -66,10 +69,14 @@ public class ErrorParser implements IErrorParser {
 
 				for (Replacement replacement : diag.getReplacements()) {
 					String errorFilePath = replacement.getFilePath();
+					IFile reportedFile = eoParser.findFileName(errorFilePath);
+					if (! reportedFile.exists()) {
+						Activator.logWarning(String.format("file %s does not exist on the file system", errorFilePath));
+						continue;
+					}
+
 					int startChar = replacement.getOffset();
 					int endChar = startChar + replacement.getLength();
-					@SuppressWarnings("boxing")
-					IFile reportedFile = eoParser.findFileName(errorFilePath);
 					boolean everythingIsInOrder = (reportedFile != null) && (errorFilePath != null);
 					if (everythingIsInOrder) {
 						RapiderProblemMarkerInfo info = new RapiderProblemMarkerInfo(reportedFile, diag.getId(),
