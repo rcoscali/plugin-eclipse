@@ -14,7 +14,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
         IPreferenceStore store = Activator.getInstance().getPreferenceStore();
         store.setDefault(PreferencePage.EXTERNAL_TOOL_PATH_PREF_KEY, ""); //$NON-NLS-1$
-        store.setDefault(PreferencePage.USE_EXTERNAL_TOOL_PREF_KEY, true);
+        store.setDefault(PreferencePage.EXTERNAL_LIB_PATH_PREF_KEY, ""); //$NON-NLS-1$
+        store.setDefault(PreferencePage.USE_EMBEDDED_TOOL_PREF_KEY, true);
 	}
 
 }

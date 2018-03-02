@@ -34,6 +34,8 @@ import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 public class RapiderInvoker {
 	private static final String RAPIDER_EXE_RELATIVE_PATH = "/bin/clang-tidy"; //$NON-NLS-1$
 	private static final String RAPIDER_LIB_RELATIVE_PATH = "/bin/lib"; //$NON-NLS-1$
+	private static final String LD_LIBRARY_PATH_PREFIX = "LD_LIBRARY_PATH="; //$NON-NLS-1$
+	private static final String LD_PRELOAD_VARENV = "LD_PRELOAD=/usr/lib64/libstdc++.so.6"; //$NON-NLS-1$
 	private static final String DEFAULT_CONTEXT_MENU_ID = "org.eclipse.cdt.ui.CDTBuildConsole"; //$NON-NLS-1$
 	private static final NullProgressMonitor NULL_PROGRESS_MONITOR = new NullProgressMonitor();
 	private File embeddedRapider = null;
@@ -57,27 +59,37 @@ public class RapiderInvoker {
 	 */
 	public void invoke(InvocationParameters parameters, ConfigurationSettings settings,
 			ErrorParserManager errorParserManager) throws InvocationFailure, Throwable {
+		Command command = this.buildCommand(parameters, settings);
+		launchCommand(command, parameters, settings);
+		this.parser.processReport(command.getExportFile(), errorParserManager);
+	}
+
+	public Command buildCommand(InvocationParameters parameters, ConfigurationSettings settings)
+			throws URISyntaxException, IOException {
 		boolean isEmbeddedRapiderUsed = Activator.getInstance().getPreferenceStore()
-				.getBoolean(PreferencePage.USE_EXTERNAL_TOOL_PREF_KEY);
+				.getBoolean(PreferencePage.USE_EMBEDDED_TOOL_PREF_KEY);
 		File rapiderExe;
+		List<String> envs;
+
 		if (isEmbeddedRapiderUsed) {
 			rapiderExe = this.getEmbeddedRapider();
+			envs = buildEnvs();
 		} else {
 			rapiderExe = new File(
 					Activator.getInstance().getPreferenceStore().getString(PreferencePage.EXTERNAL_TOOL_PATH_PREF_KEY));
+			envs = buildExternalEnvs();
 		}
+
 		ArgsSeparator argsSeparator = new ArgsSeparator();
 
 		// building the args (notably the export file)
 		// TODO gérer le chemin vers le compile_commands.json
 		// + si ce chemin n'est pas renseigné --> lever une exception
 		final File outFile = createExportFixesFile(parameters.getActualFile());
-		Command command = CommandBuilder.buildCommand(rapiderExe, parameters, settings, argsSeparator, outFile,
-				buildEnvs());
-		launchCommand(command, parameters, settings);
-		this.parser.processReport(outFile, errorParserManager);
+		Command command = CommandBuilder.buildCommand(rapiderExe, parameters, settings, argsSeparator, outFile, envs);
+	return command;
 	}
-
+	
 	private static File createExportFixesFile(final IResource actualFile) throws IOException {
 		String exportFileName = "RapiderTmp_export_fixes_" + actualFile.getName(); //$NON-NLS-1$
 		final File tempFile = File.createTempFile(exportFileName, Long.toString(System.currentTimeMillis()));
@@ -133,8 +145,8 @@ public class RapiderInvoker {
 	 * file that will be deleted once Eclipse returns.
 	 * 
 	 * @return the file
-	 * @throws IOException 
-	 * @throws URISyntaxException 
+	 * @throws IOException
+	 * @throws URISyntaxException
 	 */
 	private File getEmbeddedRapider() throws URISyntaxException, IOException {
 		if (this.embeddedRapider != null) {
@@ -168,8 +180,6 @@ public class RapiderInvoker {
 	 */
 	private static List<String> buildEnvs() throws IOException {
 
-		final String LD_LIBRARY_PATH_PREFIX = "LD_LIBRARY_PATH="; //$NON-NLS-1$
-		final String LD_PRELOAD_VARENV = "LD_PRELOAD=/usr/lib64/libstdc++.so.6"; //$NON-NLS-1$
 		List<String> envs = new ArrayList<String>();
 
 		URL fileURL = findUrlInBundle(RAPIDER_LIB_RELATIVE_PATH);
@@ -183,6 +193,12 @@ public class RapiderInvoker {
 		String libDirPath = fileURL.getPath();
 		envs.add(LD_LIBRARY_PATH_PREFIX + libDirPath);
 		envs.add(LD_PRELOAD_VARENV); // $NON-NLS-1$
+		return envs;
+	}
+
+	private static List<String> buildExternalEnvs() {
+		List<String> envs = new ArrayList<String>();
+		envs.add(LD_LIBRARY_PATH_PREFIX + Activator.getInstance().getPreferenceStore().getString(PreferencePage.EXTERNAL_LIB_PATH_PREF_KEY));
 		return envs;
 	}
 

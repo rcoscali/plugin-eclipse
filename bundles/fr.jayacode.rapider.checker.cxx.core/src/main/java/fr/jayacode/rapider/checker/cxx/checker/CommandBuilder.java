@@ -40,7 +40,7 @@ public class CommandBuilder {
 		// last, the file to process
 		args.add(parameters.getActualFilePath());
 
-		return new Command(new Path(rapiderExe.getAbsolutePath()), args.toArray(new String[args.size()]), envs.toArray(new String[envs.size()]));
+		return new Command(new Path(rapiderExe.getAbsolutePath()), args.toArray(new String[args.size()]), envs.toArray(new String[envs.size()]), exportFixesFile);
 	}
 
 	/**
