@@ -3,5 +3,9 @@
    <feature url="features/fr.jayacode.rapider.checker.cxx_1.0.0.qualifier.jar" id="fr.jayacode.rapider.checker.cxx" version="1.0.0.qualifier">
       <category name="fr.jayacode.checker.category"/>
    </feature>
-   <category-def name="fr.jayacode.checker.category" label="Analyse de code Rapider"/>
+   <category-def name="fr.jayacode.checker.category" label="Rapider C/C++ Code Analysis">
+      <description>
+         Integration of the Rapider C/C++analysis tool to your Eclipse environment, specialized in code modernization.
+      </description>
+   </category-def>
 </site>
