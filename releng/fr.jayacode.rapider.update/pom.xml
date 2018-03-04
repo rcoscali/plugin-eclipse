@@ -1,18 +1,16 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.jayacode.rapider</groupId>
-    <artifactId>fr.jayacode.rapider.releng</artifactId>
+    <artifactId>fr.jayacode.rapider.update</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>eclipse-repository</packaging>
 
     <parent>
         <groupId>fr.jayacode.rapider</groupId>
-        <artifactId>fr.jayacode.rapider.root</artifactId>
+        <artifactId>fr.jayacode.rapider.releng</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>fr.jayacode.rapider.update</module>
-    </modules>
-
 </project>
+
+

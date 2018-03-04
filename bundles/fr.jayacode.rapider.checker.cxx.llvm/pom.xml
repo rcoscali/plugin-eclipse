@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>fr.jayacode.rapider</groupId>
-    <artifactId>fr.jayacode.rapider.bundles</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>fr.jayacode.rapider.checker.cxx.llvm</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>fr.jayacode.rapider</groupId>
+		<artifactId>fr.jayacode.rapider.bundles</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>fr.jayacode.rapider.checker.cxx.llvm</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>/bin/bash</executable>
+							<arguments>
+								<argument>scripts/copyLinksToLlvmJar.sh</argument>
+							</arguments>
+							<workingDirectory>.</workingDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
