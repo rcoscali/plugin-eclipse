@@ -9,7 +9,6 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>fr.jayacode.rapider.checker.cxx.llvm</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<build>
 		<plugins>
