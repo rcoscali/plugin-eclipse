@@ -231,7 +231,7 @@ public class Checker extends AbstractCheckerWithProblemPreferences implements IM
 		
 		IFile file = (IFile) resource;
 		try {
-			if (FileUtils.doesLineContains(file, loc.getStartingChar(), suppressionComment)) {
+			if (FileUtils.doesLineInFileContains(file, loc.getStartingChar(), suppressionComment)) {
 				return false;
 			}
 		} catch (IOException | CoreException e) {

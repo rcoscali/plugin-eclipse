@@ -35,7 +35,22 @@ public class FileUtils {
 		}
 	}
 
-	public static boolean doesLineContains(IFile file, int offset, String substring) throws IOException, CoreException {
+	/**
+	 * Searches for a substring on a specific line in a specific file. The line is
+	 * not represented by its number, but by the offset of the first char to search
+	 * from.<br>
+	 * Attention! The line can begin before the offset? Pay attention to the offset
+	 * you give in parameter.
+	 * 
+	 * @param file The file to earsch in
+	 * @param offset the offset of the first character to search from
+	 * @param substring The substring to search
+	 * @return True if substring is containd between the offset-th character and the end of the line.
+	 * @throws IOException
+	 * @throws CoreException
+	 */
+	public static boolean doesLineInFileContains(IFile file, int offset, String substring)
+			throws IOException, CoreException {
 
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getContents()))) {
 			reader.skip(offset);
