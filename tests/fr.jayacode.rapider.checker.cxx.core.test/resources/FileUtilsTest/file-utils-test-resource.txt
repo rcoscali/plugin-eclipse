@@ -1,0 +1,3 @@
+une ligne de 26 caractères
+est-ce que cette ligne contient 'toto' après le 60ème caractère : oui
+est-ce que cette ligne contient 'toto' après le 130ème caractère : oui  

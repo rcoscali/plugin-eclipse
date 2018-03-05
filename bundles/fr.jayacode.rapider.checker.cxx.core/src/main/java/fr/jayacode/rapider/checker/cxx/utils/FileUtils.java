@@ -21,6 +21,8 @@ import org.eclipse.core.runtime.CoreException;
 public class FileUtils {
 
 	/**
+	 * Computes the line number corresponding to the offset-th char<br>
+	 * Offset begins at 0 !
 	 * @param file
 	 * @param offset
 	 * @return
@@ -39,6 +41,7 @@ public class FileUtils {
 	 * Searches for a substring on a specific line in a specific file. The line is
 	 * not represented by its number, but by the offset of the first char to search
 	 * from.<br>
+ 	 * Offset begins at 0 !<br>
 	 * Attention! The line can begin before the offset? Pay attention to the offset
 	 * you give in parameter.
 	 * 
