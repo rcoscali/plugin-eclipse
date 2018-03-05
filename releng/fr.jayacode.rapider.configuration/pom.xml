@@ -9,7 +9,6 @@
 		<tycho.version>0.26.0</tycho.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<p2-repo.url>http://download.eclipse.org/releases/oxygen/</p2-repo.url>
-		<RAPIDER_CXX_VERSION>${project.version}</RAPIDER_CXX_VERSION>
 	</properties>
 
 	<repositories>
@@ -29,6 +28,15 @@
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<useUIHarness>true</useUIHarness>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -78,7 +86,7 @@
 			<dependency>
 				<groupId>fr.jayacode.rapider</groupId>
 				<artifactId>fr.jayacode.rapider.checker.cxx.core</artifactId>
-				<version>${RAPIDER_CXX_VERSION}</version>
+				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
