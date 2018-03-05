@@ -1,7 +1,7 @@
 /**
  * 
  */
-package utils;
+package fr.jayacode.rapider.checker.cxx.utils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

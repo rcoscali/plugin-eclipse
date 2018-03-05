@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import fr.jayacode.rapider.checker.cxx.Activator;
 import fr.jayacode.rapider.checker.cxx.Messages;
-import utils.FileUtils;
+import fr.jayacode.rapider.checker.cxx.utils.FileUtils;
 
 /**
  * Convenience class for acessing rapider specific values in the

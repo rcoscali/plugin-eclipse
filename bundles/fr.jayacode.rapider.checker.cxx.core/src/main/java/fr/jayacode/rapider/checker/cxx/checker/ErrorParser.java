@@ -28,7 +28,7 @@ import fr.jayacode.rapider.checker.cxx.Messages;
 import fr.jayacode.rapider.checker.cxx.model.Diagnostic;
 import fr.jayacode.rapider.checker.cxx.model.RapiderReport;
 import fr.jayacode.rapider.checker.cxx.model.Replacement;
-import utils.FileUtils;
+import fr.jayacode.rapider.checker.cxx.utils.FileUtils;
 
 /**
  * Class in charge of processing outstream from rapider into problem markers.
