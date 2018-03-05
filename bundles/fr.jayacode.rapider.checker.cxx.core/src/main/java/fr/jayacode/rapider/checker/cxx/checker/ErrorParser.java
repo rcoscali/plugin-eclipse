@@ -76,7 +76,8 @@ public class ErrorParser implements IErrorParser {
 						continue;
 					}
 
-					int startChar = replacement.getOffset();
+					// we have to decrement the offset to match clang-tidy's offset
+					int startChar = replacement.getOffset() -1;
 					int endChar = startChar + replacement.getLength();
 					boolean everythingIsInOrder = (reportedFile != null) && (errorFilePath != null);
 					if (everythingIsInOrder) {
