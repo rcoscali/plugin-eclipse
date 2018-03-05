@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -17,12 +18,18 @@ import fr.jayacode.rapider.checker.cxx.model.Diagnostic;
 import fr.jayacode.rapider.checker.cxx.model.RapiderReport;
 import fr.jayacode.rapider.checker.cxx.model.Replacement;
 
+/**
+ * Tests for the ErrorParser
+ * 
+ * @author cconversin
+ *
+ */
 @SuppressWarnings("nls")
 public class ErrorParserTest {
 
 	/**
-	 * test avec un fichier qui est bien formé : il a tous les champs nécessaires et
-	 * uniquement ceux-là
+	 * Tests with a well-formed YAML file: it's got all the compulsory fileds, and
+	 * only these ones.
 	 * 
 	 * @throws ParsingErrorException
 	 */
@@ -82,8 +89,30 @@ public class ErrorParserTest {
 	}
 
 	/**
-	 * test avec un fichier qui est bien formé mais qui a des champs surnuméraires
-	 * qui ne correspondent à rien --> il faut les ignorer
+	 * Tests with a well-formed YAML file but that got an entry with no replacements
+	 * 
+	 * @throws ParsingErrorException
+	 */
+	@Test
+	public void testZeroReplacements() throws ParsingErrorException {
+		ErrorParser ep = new ErrorParser();
+		File fixesFile = new File("resources/ErrorParserTest/export-fixes-normal-uc.log"); //$NON-NLS-1$
+		RapiderReport report = null;
+		report = ep.parseFixesExportFile(fixesFile);
+
+		assertNotNull(report);
+
+		assertTrue(report.getDiagnostics().size() >= 1);
+
+		Diagnostic diag0 = report.getDiagnostics().get(0);
+		assertEquals("Cannot parse invalid groups file 'request_groups.json'!", diag0.getMessage());
+		assertEquals("clang-diagnostic-error", diag0.getDiagnosticName());
+		assertNull(diag0.getReplacements());
+	}
+
+	/**
+	 * Tests with a well-formed YAML file, but that contains extra fiels -> they
+	 * should be ignored
 	 * 
 	 * @throws ParsingErrorException
 	 */
@@ -124,7 +153,7 @@ public class ErrorParserTest {
 	}
 
 	/**
-	 * test avec un fichier syntaxiquement malformé
+	 * Tests with a file that has syntax errors in it.
 	 * 
 	 * @throws ParsingErrorException
 	 */
@@ -139,7 +168,7 @@ public class ErrorParserTest {
 	}
 
 	/**
-	 * test avec un fichier inexistant
+	 * tets with a non-exoistant file
 	 * 
 	 * @throws ParsingErrorException
 	 */
@@ -152,7 +181,5 @@ public class ErrorParserTest {
 		report = ep.parseFixesExportFile(fixesFile);
 		fail();
 	}
-
-	// test avec un fichier sans replacements
 
 }
