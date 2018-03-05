@@ -16,31 +16,31 @@ public class Replacement {
 	}
 
 	public void setFilePath(String filePath) {
-		FilePath = filePath;
+		this.FilePath = filePath;
 	}
 
 	public int getOffset() {
-		return Offset;
+		return this.Offset;
 	}
 
 	public void setOffset(int offset) {
-		Offset = offset;
+		this.Offset = offset;
 	}
 
 	public int getLength() {
-		return Length;
+		return this.Length;
 	}
 
 	public void setLength(int length) {
-		Length = length;
+		this.Length = length;
 	}
 
 	public String getReplacementText() {
-		return ReplacementText;
+		return this.ReplacementText;
 	}
 
 	public void setReplacementText(String replacementText) {
-		ReplacementText = replacementText;
+		this.ReplacementText = replacementText;
 	}
 
 

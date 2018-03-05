@@ -32,7 +32,10 @@ public class FileUtils {
 	 */
 	public static int getLineNumberFromOffset(IFile file, int offset) throws IOException, CoreException {
 		try (LineNumberReader r = new LineNumberReader(new InputStreamReader(file.getContents()))) {
-			r.skip(offset);
+			long reallySkipped = r.skip(offset);
+			if (reallySkipped != offset) {
+				throw new IndexOutOfBoundsException();
+			}
 			return r.getLineNumber() + 1;
 		}
 	}

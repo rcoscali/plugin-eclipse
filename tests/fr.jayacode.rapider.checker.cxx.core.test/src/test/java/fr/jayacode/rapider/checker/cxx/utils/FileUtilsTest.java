@@ -3,23 +3,19 @@ package fr.jayacode.rapider.checker.cxx.utils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.junit.Test;
 
+import fr.jayacode.rapider.checker.cxx.AbstractTest;
 import fr.jayacode.rapider.checker.cxx.checker.ErrorParser.ParsingErrorException;
 
 @SuppressWarnings("nls")
-public class FileUtilsTest {
+public class FileUtilsTest extends AbstractTest {
 
 	@Test
 	public void testLineNumber_casDroit() throws ParsingErrorException, IOException, CoreException {
@@ -32,10 +28,11 @@ public class FileUtilsTest {
 		assertEquals(2, FileUtils.getLineNumberFromOffset(testFile, 28));
 	}
 
-	@Test
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testLineNumber_outOfBound() throws ParsingErrorException, CoreException, IOException {
 		IFile testFile = (IFile) getFileInWorspace("resources/FileUtilsTest/file-utils-test-resource.txt");
-		assertEquals(3, FileUtils.getLineNumberFromOffset(testFile, 1000));
+		FileUtils.getLineNumberFromOffset(testFile, 1000);
+		fail();
 	}
 
 	@Test
@@ -51,27 +48,6 @@ public class FileUtilsTest {
 		assertTrue(FileUtils.doesLineInFileContains(testFile, 97, "toto"));
 		assertTrue(FileUtils.doesLineInFileContains(testFile, 130, "toto"));
 		assertFalse(FileUtils.doesLineInFileContains(testFile, 131, "toto"));
-	}
-
-	private static IResource getFileInWorspace(final String path) throws CoreException, FileNotFoundException {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("test");
-		if (!project.exists()) {
-			project.create(null);
-			project.open(null);
-
-			IFolder folder1 = project.getFolder("resources");
-			folder1.create(true, true, null);
-
-			IFolder folder2 = project.getFolder("resources/FileUtilsTest");
-			folder2.create(true, true, null);
-		}
-
-		IFile file = project.getFile(path);
-		if (!file.exists()) {
-			FileInputStream fileStream = new FileInputStream(path);
-			file.create(fileStream, true, null);
-		}
-		return file;
 	}
 
 }
