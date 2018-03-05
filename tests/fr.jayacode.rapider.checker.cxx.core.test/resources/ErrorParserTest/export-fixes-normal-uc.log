@@ -1,20 +1,14 @@
 ---
-MainSourceFile:  /home/cconversin/workspace/Tidy/ex.c
+MainSourceFile:  /home/user/workspace/Tidy/ex.c
 Diagnostics:     
   - DiagnosticName:  clang-diagnostic-error
     Message:         'Cannot parse invalid groups file ''request_groups.json''!'
-    FileOffset:      0
-    FilePath:        ''
     Replacements:    
   - DiagnosticName:  clang-diagnostic-error
     Message:         '''stddef.h'' file not found'
-    FileOffset:      1146
-    FilePath:        /usr/include/stdio.h
     Replacements:    
   - DiagnosticName:  llvm-include-order
     Message:         '#includes are not sorted properly'
-    FileOffset:      0
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          9
@@ -34,8 +28,6 @@ Diagnostics:
         ReplacementText: '<string.h>'
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''index'' does not follow naming rules'
-    FileOffset:      93
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          93
@@ -43,8 +35,6 @@ Diagnostics:
         ReplacementText: xIndex
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''indent'' does not follow naming rules'
-    FileOffset:      112
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          112
@@ -52,8 +42,6 @@ Diagnostics:
         ReplacementText: pxIndent
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''index'' does not follow naming rules'
-    FileOffset:      164
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          164
@@ -61,8 +49,6 @@ Diagnostics:
         ReplacementText: xIndex
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''indent'' does not follow naming rules'
-    FileOffset:      179
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          179
@@ -70,8 +56,6 @@ Diagnostics:
         ReplacementText: pxIndent
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''index'' does not follow naming rules'
-    FileOffset:      209
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          209
@@ -79,8 +63,6 @@ Diagnostics:
         ReplacementText: xIndex
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''indent'' does not follow naming rules'
-    FileOffset:      224
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          224
@@ -88,8 +70,6 @@ Diagnostics:
         ReplacementText: pxIndent
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''index'' does not follow naming rules'
-    FileOffset:      255
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          255
@@ -97,8 +77,6 @@ Diagnostics:
         ReplacementText: xIndex
   - DiagnosticName:  hicpp-braces-around-statements
     Message:         statement should be inside braces
-    FileOffset:      266
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          266
@@ -111,8 +89,6 @@ Diagnostics:
 }'
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''index'' does not follow naming rules'
-    FileOffset:      319
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          319
@@ -120,8 +96,6 @@ Diagnostics:
         ReplacementText: xIndex
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''indent'' does not follow naming rules'
-    FileOffset:      326
-    FilePath:        ex.c
     Replacements:    
       - FilePath:        ex.c
         Offset:          326
@@ -129,22 +103,14 @@ Diagnostics:
         ReplacementText: pxIndent
   - DiagnosticName:  misc-unused-parameters
     Message:         'parameter ''argc'' is unused'
-    FileOffset:      351
-    FilePath:        ex.c
     Replacements:    
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''argc'' does not follow naming rules'
-    FileOffset:      351
-    FilePath:        ex.c
     Replacements:    
   - DiagnosticName:  misc-unused-parameters
     Message:         'parameter ''argv'' is unused'
-    FileOffset:      364
-    FilePath:        ex.c
     Replacements:    
   - DiagnosticName:  nagravision-argument-naming
     Message:         'parameter name ''argv'' does not follow naming rules'
-    FileOffset:      364
-    FilePath:        ex.c
     Replacements:    
 ...
