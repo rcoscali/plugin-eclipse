@@ -3,11 +3,10 @@ package fr.jayacode.rapider.checker.cxx.checker;
 import java.io.File;
 
 import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
-import org.eclipse.cdt.codan.core.cxx.internal.externaltool.ArgsSetting;
 import org.eclipse.cdt.codan.core.param.MapProblemPreference;
 
 public final class ConfigurationSettings {
-	private final ArgsSetting args;
+	private final ArgsSettings args;
 	private final CompileCommandFileSettings compileCommandsFile;
 	private final String externalToolName;
 
@@ -28,7 +27,7 @@ public final class ConfigurationSettings {
 	 */
 	public ConfigurationSettings(String externalToolName, File defaultCompileCommandsFile, String defaultArgs) {
 		this.compileCommandsFile = new CompileCommandFileSettings(externalToolName, defaultCompileCommandsFile);
-		this.args = new ArgsSetting(externalToolName, defaultArgs);
+		this.args = new ArgsSettings(externalToolName, defaultArgs);
 		this.externalToolName = externalToolName;
 	}
 
