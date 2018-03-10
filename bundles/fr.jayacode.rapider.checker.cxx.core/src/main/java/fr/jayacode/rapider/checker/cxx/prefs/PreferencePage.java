@@ -98,9 +98,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		this.toolPathFieldParent = getFieldEditorParent();
 		this.toolPathField = new FileFieldEditor(EXTERNAL_TOOL_PATH_PREF_KEY,
 				Messages.PreferencePage_path_to_rapider_label, this.toolPathFieldParent);
+		this.toolPathField.setEmptyStringAllowed(false);
 		this.libPathFieldParent = getFieldEditorParent();
-		this.libPathField = new DirectoryFieldEditor(EXTERNAL_LIB_PATH_PREF_KEY, Messages.PreferencePage_path_to_libs_label,
-				this.libPathFieldParent);
+		this.libPathField = new DirectoryFieldEditor(EXTERNAL_LIB_PATH_PREF_KEY,
+				Messages.PreferencePage_path_to_libs_label, this.libPathFieldParent);
 		addField(this.useEmbeddedField);
 		addField(this.toolPathField);
 		addField(this.libPathField);
