@@ -23,7 +23,7 @@ public class RapiderProblemMarkerInfoTest extends AbstractTest {
 		RapiderProblemMarkerInfo info2 = new RapiderProblemMarkerInfo(testFile, 2, 100, 15, IMarkerGenerator.SEVERITY_WARNING, "fakeRuneName", "FakeDescription", "FakeReplacementText");
 
 		assertEquals(1, info1.lineNumber);
-		assertEquals(2, info2.lineNumber);
+		assertEquals(3, info2.lineNumber);
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)

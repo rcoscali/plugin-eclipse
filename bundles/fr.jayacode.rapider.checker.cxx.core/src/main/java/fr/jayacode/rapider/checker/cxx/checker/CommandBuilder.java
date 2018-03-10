@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.codan.core.cxx.externaltool.ArgsSeparator;
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
 import org.eclipse.core.resources.IProject;
@@ -55,7 +56,7 @@ public class CommandBuilder {
 	 */
 	private static String computeCompileCommandsArg(final InvocationParameters parameters,
 			final ConfigurationSettings settings) {
-		if (settings.getCompileCommandsFile().getValue() != null) {
+		if (settings.getCompileCommandsFile().getValue() != null && StringUtils.isNotBlank(settings.getCompileCommandsFile().getValue().getPath())) {
 			return settings.getCompileCommandsFile().getValue().getAbsolutePath();
 		}
 
