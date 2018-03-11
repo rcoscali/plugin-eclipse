@@ -5,5 +5,5 @@ Bundle-Name: %Llvm-Bundle-Name
 Bundle-SymbolicName: fr.jayacode.rapider.checker.cxx.llvm
 Bundle-Version: 1.0.0.qualifier
 Fragment-Host: fr.jayacode.rapider.checker.cxx.core;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: %Bundle-Vendor
