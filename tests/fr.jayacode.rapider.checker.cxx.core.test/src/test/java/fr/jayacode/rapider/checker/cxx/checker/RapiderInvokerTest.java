@@ -9,16 +9,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.eclipse.cdt.codan.core.cxx.externaltool.InvocationParameters;
-import org.eclipse.cdt.codan.core.model.IProblem;
 import org.eclipse.cdt.codan.core.param.IProblemPreference;
 import org.eclipse.cdt.codan.core.param.MapProblemPreference;
 import org.eclipse.cdt.codan.core.param.RootProblemPreference;
-import org.eclipse.cdt.codan.internal.core.CheckersRegistry;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.junit.Before;
 import org.junit.Test;
 
 import fr.jayacode.rapider.checker.cxx.AbstractTest;
@@ -27,7 +24,7 @@ import fr.jayacode.rapider.checker.cxx.Messages;
 import fr.jayacode.rapider.checker.cxx.checker.ErrorParser.ParsingErrorException;
 import fr.jayacode.rapider.checker.cxx.prefs.PreferencePage;
 
-@SuppressWarnings({ "nls", "restriction" })
+@SuppressWarnings({ "nls" })
 public class RapiderInvokerTest extends AbstractTest {
 
 	private static void updateSettings(ConfigurationSettings settings, File userDefinedFile,
@@ -82,7 +79,6 @@ public class RapiderInvokerTest extends AbstractTest {
 		assertEquals("LD_PRELOAD=/usr/lib64/libstdc++.so.6", envs[1]);
 
 		File exe = command.getPath().toFile();
-		String exePath = exe.getAbsolutePath();
 		assertTrue(exe.getAbsolutePath().matches("/.*/fr.jayacode.rapider.checker.cxx.llvm.*/bin/clang-tidy"));
 		assertTrue(exe.exists());
 

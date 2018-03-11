@@ -51,9 +51,9 @@ public class MarkerResolution extends AbstractCodanCMarkerResolution implements 
 		// int endChar = MarkerUtilities.getCharEnd(marker);
 		// String replacementString = marker.getAttribute("patch", "");
 
-		String a = this.getProblemArgument(marker, 0);
-		String b = this.getProblemArgument(marker, 1);
-		System.out.println("KikouCCN"); //$NON-NLS-1$
+//		String a = this.getProblemArgument(marker, 0);
+//		String b = this.getProblemArgument(marker, 1);
+//		System.out.println("KikouCCN"); //$NON-NLS-1$
 	}
 
 }
