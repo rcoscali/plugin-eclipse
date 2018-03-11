@@ -109,6 +109,14 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		updatePathFieldEnablement(!isEmbeddedRapiderused);
 	}
 
+	@Override
+	protected void checkState() {
+		this.setValid(this.useEmbeddedField.getBooleanValue() || !this.toolPathField.getStringValue().isEmpty());
+		if (this.isValid()) {
+			this.setErrorMessage(null);
+		}
+	}
+
 	/**
 	 * Updates the fields according to entered values
 	 */
@@ -121,7 +129,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		if (event.getProperty().equals(FieldEditor.VALUE) && event.getSource() == this.useEmbeddedField) {
-			updatePathFieldEnablement(!(boolean) event.getNewValue());
+			boolean embedded = (boolean) event.getNewValue();
+			updatePathFieldEnablement(!embedded);
+			this.checkState();
 		}
 		super.propertyChange(event);
 	}
