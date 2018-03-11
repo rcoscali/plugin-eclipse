@@ -6,6 +6,8 @@ import org.eclipse.cdt.codan.core.cxx.externaltool.SingleConfigurationSetting;
 import org.eclipse.cdt.codan.core.param.BasicProblemPreference;
 import org.eclipse.cdt.codan.core.param.IProblemPreferenceDescriptor;
 
+import fr.jayacode.rapider.checker.cxx.Messages;
+
 /**
  * User-configurable setting that specifies the arguments to pass when invoking the external tool.
  * The arguments are stored in a single {@code String}.
@@ -24,7 +26,7 @@ public class ArgsSettings extends SingleConfigurationSetting<String> {
 	}
 
 	private static IProblemPreferenceDescriptor newPreferenceDescriptor(String externalToolName) {
-		String label = String.format("Additional arguments:", externalToolName);
+		String label = String.format(Messages.ArgsSettings_label, externalToolName);
 		return new BasicProblemPreference(KEY, label, TYPE_STRING);
 	}
 }

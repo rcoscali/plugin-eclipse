@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "fr.jayacode.rapider.checker.cxx.messages"; //$NON-NLS-1$
+	public static String ArgsSettings_label;
 	public static String Checker_RapiderToolName;
 	public static String CompileCommandFileSettings_label;
 	public static String ErrorParser_file_closing_exception_error_message;
