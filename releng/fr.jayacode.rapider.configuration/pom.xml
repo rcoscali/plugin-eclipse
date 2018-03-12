@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.jayacode.rapider</groupId>
 	<artifactId>fr.jayacode.rapider.configuration</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -21,7 +21,7 @@
 	</repositories>
 
 	<scm>
-		<connection>scm:git:git@github.com:JayaCodeFr/plugin-eclipse.git</connection>
+		<connection>scm:git:https://github.com/JayaCodeFr/plugin-eclipse</connection>
 	</scm>
 
 	<build>
